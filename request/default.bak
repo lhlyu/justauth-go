@@ -1,0 +1,141 @@
+func NewAuthDefaultRequest(config config.AuthConfig, source config.AuthSource) *DefaultRequest {
+	// 检查是否是否支持 todo
+	// 检查配置是否合法 todo
+	return &DefaultRequest{
+		BaseRequest:BaseRequest{
+			Config: config,
+			Source: source,
+		},
+	}
+}
+
+// Override 统一的登录入口
+func (this *DefaultRequest) Login(callback *model.Callback) (*model.AuthResponse, *errcode.ErrCode) {
+	// 检查参数 todo
+	authToken, err := this.GetAccessToken(callback)
+	if err != nil {
+		return nil, err
+	}
+	authUser, err := this.GetUserInfo(authToken)
+	if err != nil {
+		return nil, err
+	}
+	return model.Success.WithData(authUser), nil
+}
+
+// Override 返回授权url，可自行跳转页面
+func (this *DefaultRequest) Authorize() (string, *errcode.ErrCode) {
+	return this.AuthorizeWithState("")
+}
+
+// Override
+func (this *DefaultRequest) AuthorizeWithState(state string) (string, *errcode.ErrCode) {
+	return utils.NewUrlBuilder(this.Source.Authorize()).
+		AddParam("response_type", "code").
+		AddParam("client_id", this.Config.ClientId).
+		AddParam("redirect_uri", this.Config.RedirectUrl).
+		AddParam("state", this.getRealState(state)).Build(), nil
+}
+
+
+func (this *DefaultRequest) getRealState(state string) string {
+	if state == "" {
+		return utils.GetUUID()
+	}
+	return state
+}
+
+// Override
+func (this *DefaultRequest) GetAccessToken(callback *model.Callback) (*model.AuthToken, *errcode.ErrCode) {
+	return nil, errcode.NewErrCode(enums.NOT_IMPLEMENTED)
+}
+
+// Override
+func (this *DefaultRequest) GetUserInfo(authToken *model.AuthToken) (*model.AuthUser, *errcode.ErrCode) {
+	return nil, errcode.NewErrCode(enums.NOT_IMPLEMENTED)
+}
+
+// Override
+func (this *DefaultRequest) accessTokenUrl(code string) (string, *errcode.ErrCode) {
+	if code == "" {
+		return "", nil
+	}
+	return utils.NewUrlBuilder(this.Source.AccessToken()).
+		AddParam("code", code).
+		AddParam("client_id", this.Config.ClientId).
+		AddParam("client_secret", this.Config.ClientSecret).
+		AddParam("grant_type", "authorization_code").
+		AddParam("redirect_uri", this.Config.RedirectUrl).Build(), nil
+}
+
+// Override 返回获取accessToken的url
+func (this *DefaultRequest) RefreshTokenUrl(refreshToken string) (string, *errcode.ErrCode) {
+	if refreshToken == "" {
+		return "", nil
+	}
+	return utils.NewUrlBuilder(this.Source.Refresh()).
+		AddParam("client_id", this.Config.ClientId).
+		AddParam("client_secret", this.Config.ClientSecret).
+		AddParam("refresh_token", refreshToken).
+		AddParam("grant_type", "refresh_token").
+		AddParam("redirect_uri", this.Config.RedirectUrl).Build(), nil
+}
+
+// Override 返回获取userInfo的url
+func (this *DefaultRequest) UserInfoUrl(authToken *model.AuthToken) (string, *errcode.ErrCode) {
+	if authToken == nil {
+		return "", nil
+	}
+	return utils.NewUrlBuilder(this.Source.UserInfo()).
+		AddParam("access_token", authToken.AccessToken).Build(), nil
+}
+
+// Override 返回获取revoke authorization的url
+func (this *DefaultRequest) RevokeUrl(authToken *model.AuthToken) (string, *errcode.ErrCode) {
+	if authToken == nil {
+		return "", nil
+	}
+	return utils.NewUrlBuilder(this.Source.Revoke()).
+		AddParam("access_token", authToken.AccessToken).Build(), nil
+}
+
+// 通用的 authorizationCode 协议
+func (this *DefaultRequest) doPostAuthorizationCode(code string) (string, *errcode.ErrCode) {
+	url, err := this.accessTokenUrl(code)
+	if err != nil {
+		return "", err
+	}
+	return utils.Post(url)
+}
+
+func (this *DefaultRequest) doPostUserInfo(authToken *model.AuthToken) (string, *errcode.ErrCode) {
+	url, err := this.UserInfoUrl(authToken)
+	if err != nil {
+		return "", err
+	}
+	return utils.Post(url)
+}
+
+func (this *DefaultRequest) doGetUserInfo(authToken *model.AuthToken) (string, *errcode.ErrCode) {
+	url, err := this.UserInfoUrl(authToken)
+	if err != nil {
+		return "", err
+	}
+	return utils.Get(url)
+}
+
+func (this *DefaultRequest) doPostRevoke(authToken *model.AuthToken) (string, *errcode.ErrCode) {
+	url, err := this.RevokeUrl(authToken)
+	if err != nil {
+		return "", err
+	}
+	return utils.Post(url)
+}
+
+func (this *DefaultRequest) doGetRevoke(authToken *model.AuthToken) (string, *errcode.ErrCode) {
+	url, err := this.RevokeUrl(authToken)
+	if err != nil {
+		return "", err
+	}
+	return utils.Get(url)
+}

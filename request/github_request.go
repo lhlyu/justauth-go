@@ -1,0 +1,105 @@
+package request
+
+import (
+	"github.com/lhlyu/justauth-go/config"
+	"github.com/lhlyu/justauth-go/enums"
+	"github.com/lhlyu/justauth-go/errcode"
+	"github.com/lhlyu/justauth-go/model"
+	"github.com/lhlyu/justauth-go/utils"
+)
+
+type GithubRequest struct {
+	BaseRequest
+}
+
+func NewGithubRequest(cfg config.AuthConfig) AuthRequest {
+	var authRequest AuthRequest
+	authRequest = &GithubRequest{
+		BaseRequest: BaseRequest{
+			Source: config.GITHUB,
+			Config: cfg,
+		},
+	}
+	return authRequest
+}
+
+// Override 返回授权url，可自行跳转页面
+func (this *GithubRequest) Authorize() (string, *errcode.ErrCode) {
+	return this.AuthorizeWithState("")
+}
+
+// Override
+func (this *GithubRequest) AuthorizeWithState(state string) (string, *errcode.ErrCode) {
+	return utils.NewUrlBuilder(this.Source.Authorize()).
+		AddParam("response_type", "code").
+		AddParam("client_id", this.Config.ClientId).
+		AddParam("redirect_uri", this.Config.RedirectUrl).
+		AddParam("state", utils.GetRealState(state)).Build(), nil
+}
+
+// Override 统一的登录入口
+func (this *GithubRequest) Login(callback *model.Callback) (*model.AuthResponse, *errcode.ErrCode) {
+	// 检查参数 todo
+	authToken, err := this.getAccessToken(callback)
+	if err != nil {
+		return nil, err
+	}
+	authUser, err := this.getUserInfo(authToken)
+	if err != nil {
+		return nil, err
+	}
+	return model.Success.WithData(authUser), nil
+}
+
+func (this *GithubRequest) getAccessToken(callback *model.Callback) (*model.AuthToken, *errcode.ErrCode) {
+	url := utils.NewUrlBuilder(this.Source.AccessToken()).
+		AddParam("code", callback.Code).
+		AddParam("client_id", this.Config.ClientId).
+		AddParam("client_secret", this.Config.ClientSecret).
+		AddParam("grant_type", "authorization_code").
+		AddParam("redirect_uri", this.Config.RedirectUrl).Build()
+	body, err := utils.Post(url)
+	if err != nil {
+		return nil, err
+	}
+	m := utils.StrToMSS(body)
+	if _, ok := m["error"]; ok {
+		desc := m["error_description"]
+		return nil, errcode.NewErrCode(enums.FAILURE).WithMsg(desc)
+	}
+	return &model.AuthToken{
+		AccessToken: m["access_token"],
+		GoogleAttr: model.GoogleAttr{
+			Scope:     m["scope"],
+			TokenType: m["token_type"],
+		},
+	}, nil
+}
+
+func (this *GithubRequest) getUserInfo(authToken *model.AuthToken) (*model.AuthUser, *errcode.ErrCode) {
+	url := utils.NewUrlBuilder(this.Source.UserInfo()).
+		AddParam("access_token", authToken.AccessToken).Build()
+	body, err := utils.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	m := utils.JsonToMSS(body)
+	if _, ok := m["error"]; ok {
+		desc := m["error_description"]
+		return nil, errcode.NewErrCode(enums.FAILURE).WithMsg(desc)
+	}
+	return &model.AuthUser{
+		UUID:     m["id"],
+		UserName: m["login"],
+		Avatar:   m["avatar_url"],
+		Blog:     m["blog"],
+		NickName: m["name"],
+		Company:  m["company"],
+		Location: m["location"],
+		Email:    m["email"],
+		Remark:   m["bio"],
+		Gender:   enums.GetRealGender("").Desc,
+		Token:    authToken,
+		Source:   this.Source.ToString(),
+	}, nil
+}
