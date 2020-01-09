@@ -2,7 +2,7 @@ package request
 
 import (
 	"github.com/lhlyu/justauth-go/config"
-	"github.com/lhlyu/justauth-go/enums"
+	"github.com/lhlyu/justauth-go/enum"
 	"github.com/lhlyu/justauth-go/errcode"
 	"github.com/lhlyu/justauth-go/model"
 	"github.com/lhlyu/justauth-go/source"
@@ -98,7 +98,7 @@ func (this *giteeRequest) getUserInfo(authToken *model.AuthToken) (*model.AuthUs
 		Location: m["address"],
 		Email:    m["email"],
 		Remark:   m["bio"],
-		Gender:   enums.GetRealGender("").Desc,
+		Gender:   enum.GetRealGender("").Desc,
 		Token:    authToken,
 		Source:   this.Source.ToString(),
 	}, nil
