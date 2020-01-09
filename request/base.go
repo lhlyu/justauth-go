@@ -28,12 +28,12 @@ func (*BaseRequest) AuthorizeWithState(state string) (string, *errcode.ErrCode) 
 	return "", errcode.NotImplemented
 }
 
-func (*BaseRequest) Login(callback *model.Callback) (*model.AuthResponse, *errcode.ErrCode) {
+func (*BaseRequest) Login(callback *model.Callback) (*model.AuthUser, *errcode.ErrCode) {
 	return nil, errcode.NotImplemented
 }
 
-func (*BaseRequest) Revoke(token *model.AuthToken) (*model.AuthResponse, *errcode.ErrCode) {
-	return nil, errcode.NotImplemented
+func (*BaseRequest) Revoke(token *model.AuthToken) *errcode.ErrCode {
+	return errcode.NotImplemented
 }
 
 func (*BaseRequest) Refresh(token *model.AuthToken) (*model.AuthResponse, *errcode.ErrCode) {

@@ -39,7 +39,7 @@ func (this *giteeRequest) AuthorizeWithState(state string) (string, *errcode.Err
 }
 
 // Override 统一的登录入口
-func (this *giteeRequest) Login(callback *model.Callback) (*model.AuthResponse, *errcode.ErrCode) {
+func (this *giteeRequest) Login(callback *model.Callback) (*model.AuthUser, *errcode.ErrCode) {
 	authToken, err := this.getAccessToken(callback)
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (this *giteeRequest) Login(callback *model.Callback) (*model.AuthResponse, 
 	if err != nil {
 		return nil, err
 	}
-	return model.Success.WithData(authUser), nil
+	return authUser, nil
 }
 
 func (this *giteeRequest) getAccessToken(callback *model.Callback) (*model.AuthToken, *errcode.ErrCode) {

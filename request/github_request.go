@@ -39,7 +39,7 @@ func (this *githubRequest) AuthorizeWithState(state string) (string, *errcode.Er
 }
 
 // Override 统一的登录入口
-func (this *githubRequest) Login(callback *model.Callback) (*model.AuthResponse, *errcode.ErrCode) {
+func (this *githubRequest) Login(callback *model.Callback) (*model.AuthUser, *errcode.ErrCode) {
 	authToken, err := this.getAccessToken(callback)
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (this *githubRequest) Login(callback *model.Callback) (*model.AuthResponse,
 	if err != nil {
 		return nil, err
 	}
-	return model.Success.WithData(authUser), nil
+	return authUser, nil
 }
 
 func (this *githubRequest) getAccessToken(callback *model.Callback) (*model.AuthToken, *errcode.ErrCode) {

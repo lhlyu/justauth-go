@@ -15,9 +15,9 @@ type AuthRequest interface {
 	// 返回带{@code state}参数的授权url，授权回调时会带上这个{@code state}
 	AuthorizeWithState(state string) (string, *errcode.ErrCode)
 	// 第三方登录
-	Login(callback *model.Callback) (*model.AuthResponse, *errcode.ErrCode)
+	Login(callback *model.Callback) (*model.AuthUser, *errcode.ErrCode)
 	// 撤销授权
-	Revoke(token *model.AuthToken) (*model.AuthResponse, *errcode.ErrCode)
+	Revoke(token *model.AuthToken) *errcode.ErrCode
 	// 刷新access token （续期）
 	Refresh(token *model.AuthToken) (*model.AuthResponse, *errcode.ErrCode)
 }
