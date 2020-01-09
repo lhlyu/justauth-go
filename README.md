@@ -34,16 +34,16 @@ func TestAuthorize(t *testing.T) {
 ```go
 // 登录，返回用户信息
 func TestLogin(t *testing.T) {
-	authRequest,err := request.NewAuthRequest(config.AuthConfig{
+	authRequest, err := request.NewAuthRequest(config.AuthConfig{
 		ClientId:     CLIENT_ID,
 		ClientSecret: CLIENT_SECRET,
 		RedirectUrl:  REDIRECT_URL,
-	},source.GITHUB)
-	if err != nil{
+	}, source.GITHUB)
+	if err != nil {
 		t.Error(err)
 		return
 	}
-	resp, err := authRequest.Login(&model.Callback{
+	user, err := authRequest.Login(&model.Callback{
 		Code:  CODE,
 		State: STATE,
 	})
@@ -51,7 +51,7 @@ func TestLogin(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	bts, _ := json.Marshal(resp)
+	bts, _ := json.Marshal(user)
 	t.Log(string(bts))
 }
 ```

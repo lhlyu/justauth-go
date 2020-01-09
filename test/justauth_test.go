@@ -29,7 +29,7 @@ func TestLogin(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	resp, err := authRequest.Login(&model.Callback{
+	user, err := authRequest.Login(&model.Callback{
 		Code:  CODE,
 		State: STATE,
 	})
@@ -37,7 +37,7 @@ func TestLogin(t *testing.T) {
 		t.Error(err)
 		return
 	}
-	bts, _ := json.Marshal(resp)
+	bts, _ := json.Marshal(user)
 	t.Log(string(bts))
 }
 
