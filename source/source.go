@@ -1,4 +1,4 @@
-package config
+package source
 
 type AuthSource interface {
 	// 授权的api
@@ -17,38 +17,38 @@ type AuthSource interface {
 
 // 32
 var (
-	GITHUB           = &GithubSource{}           // Github
-	WEIBO            = &WeiboSource{}            // 新浪微博
-	GITEE            = &GiteeSource{}            // gitee
-	DINGTALK         = &DingtalkSource{}         // 钉钉
-	BAIDU            = &BaiduSource{}            // 百度
-	CSDN             = &CsdnSource{}             // csdn
-	CODING           = &CodingSource{}           // Coding
-	TENCENTCLOUD     = &TencentCloudSource{}     // 腾讯云开发者平台（coding升级后就变成腾讯云开发者平台了）
-	OSCHINA          = &OschinaSource{}          // oschina 开源中国
-	ALIPAY           = &AlipaySource{}           // 支付宝
-	QQ               = &QQSource{}               // QQ
-	WECHATOPEN       = &WechatOpenSource{}       // 微信开放平台
-	WECHATMP         = &WechatMpSource{}         // 微信公众平台
-	TAOBAO           = &TaobaoSource{}           // 淘宝
-	GOOGLE           = &GoogleSource{}           // Google
-	FACEBOOK         = &FacebookSource{}         // Facebook
-	DOUYIN           = &DouyinSource{}           // 抖音
-	LINKEDIN         = &LinkedinSource{}         // 领英
-	MICROSOFT        = &MicrosoftSource{}        // 微软
-	MI               = &MiSource{}               // 小米
-	TOUTIAO          = &ToutiaoSource{}          // 今日头条
-	TEAMBITION       = &TeambitionSource{}       // Teambition
-	RENREN           = &RenrenSource{}           // 人人网
-	PINTEREST        = &PinterestSource{}        // Pinterest
-	STACKOVERFLOW    = &StackOverflowSource{}    // Stack Overflow
-	HUAWEI           = &HuaweiSource{}           // 华为
-	WECHATENTERPRISE = &WechatEnterpriseSource{} // 企业微信
-	KUJIALE          = &KujialeSource{}          // 酷家乐
-	GITLAB           = &GitlabSource{}           // Gitlab
-	MEITUAN          = &MeituanSource{}          // 美团
-	ELEME            = &ElemeSource{}            // 饿了么
-	TWITTER          = &TwitterSource{}          // Twitter
+	GITHUB            = &GithubSource{}           // Github
+	WEIBO             = &WeiboSource{}            // 新浪微博
+	GITEE             = &GiteeSource{}            // gitee
+	DINGTALK          = &DingtalkSource{}         // 钉钉
+	BAIDU             = &BaiduSource{}            // 百度
+	CSDN              = &CsdnSource{}             // csdn
+	CODING            = &CodingSource{}           // Coding
+	TENCENT_CLOUD     = &TencentCloudSource{}     // 腾讯云开发者平台（coding升级后就变成腾讯云开发者平台了）
+	OSCHINA           = &OschinaSource{}          // oschina 开源中国
+	ALIPAY            = &AlipaySource{}           // 支付宝
+	QQ                = &QQSource{}               // QQ
+	WECHAT_OPEN       = &WechatOpenSource{}       // 微信开放平台
+	WECHAT_MP         = &WechatMpSource{}         // 微信公众平台
+	TAOBAO            = &TaobaoSource{}           // 淘宝
+	GOOGLE            = &GoogleSource{}           // Google
+	FACEBOOK          = &FacebookSource{}         // Facebook
+	DOUYIN            = &DouyinSource{}           // 抖音
+	LINKEDIN          = &LinkedinSource{}         // 领英
+	MICROSOFT         = &MicrosoftSource{}        // 微软
+	MI                = &MiSource{}               // 小米
+	TOUTIAO           = &ToutiaoSource{}          // 今日头条
+	TEAMBITION        = &TeambitionSource{}       // Teambition
+	RENREN            = &RenrenSource{}           // 人人网
+	PINTEREST         = &PinterestSource{}        // Pinterest
+	STACK_OVERFLOW    = &StackOverflowSource{}    // Stack Overflow
+	HUAWEI            = &HuaweiSource{}           // 华为
+	WECHAT_ENTERPRISE = &WechatEnterpriseSource{} // 企业微信
+	KUJIALE           = &KujialeSource{}          // 酷家乐
+	GITLAB            = &GitlabSource{}           // Gitlab
+	MEITUAN           = &MeituanSource{}          // 美团
+	ELEME             = &ElemeSource{}            // 饿了么
+	TWITTER           = &TwitterSource{}          // Twitter
 )
 
 // Github

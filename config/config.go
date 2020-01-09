@@ -1,28 +1,19 @@
 package config
 
 type AuthConfig struct {
-	AlipayConfig
-	QQConfig
-	StackOverflowKeyConfig
-	WechatConfig
-
 	ClientId     string
 	ClientSecret string
 	RedirectUrl  string
-}
 
-type AlipayConfig struct {
+	// alipay
 	AlipayPublicKey string
-}
 
-type QQConfig struct {
+	// qq
 	UnionId bool
-}
 
-type StackOverflowKeyConfig struct {
+	// stackover
 	StackOverflowKey string
-}
 
-type WechatConfig struct {
+	// wechat
 	AgentId string
 }

@@ -1,6 +1,8 @@
 package model
 
-import "github.com/lhlyu/justauth-go/enums"
+import (
+	"github.com/lhlyu/justauth-go/errcode"
+)
 
 type AuthResponse struct {
 	Code int         `json:"code"`
@@ -9,7 +11,7 @@ type AuthResponse struct {
 }
 
 func NewAuthResponse(code int) *AuthResponse {
-	msg := enums.ResponseStatusMap[code]
+	msg := errcode.ResponseStatusMap[code]
 	return &AuthResponse{
 		Code: code,
 		Msg:  msg,
@@ -17,7 +19,7 @@ func NewAuthResponse(code int) *AuthResponse {
 }
 
 func (this *AuthResponse) Ok() bool {
-	return this.Code == enums.SUCCESS
+	return this.Code == errcode.SUCCESS
 }
 
 func (this *AuthResponse) WithData(data interface{}) *AuthResponse {
@@ -26,6 +28,6 @@ func (this *AuthResponse) WithData(data interface{}) *AuthResponse {
 }
 
 var (
-	Success = NewAuthResponse(enums.SUCCESS)
-	Failure = NewAuthResponse(enums.FAILURE)
+	Success = NewAuthResponse(errcode.SUCCESS)
+	Failure = NewAuthResponse(errcode.FAILURE)
 )

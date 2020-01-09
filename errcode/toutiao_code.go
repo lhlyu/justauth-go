@@ -1,4 +1,4 @@
-package enums
+package errcode
 
 const (
 	EC0 = iota

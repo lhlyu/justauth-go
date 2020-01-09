@@ -1,8 +1,11 @@
 package request
 
 import (
+	"github.com/lhlyu/justauth-go/config"
 	"github.com/lhlyu/justauth-go/errcode"
 	"github.com/lhlyu/justauth-go/model"
+	"github.com/lhlyu/justauth-go/source"
+	"github.com/lhlyu/justauth-go/utils"
 )
 
 type AuthRequest interface {
@@ -12,9 +15,20 @@ type AuthRequest interface {
 	// 返回带{@code state}参数的授权url，授权回调时会带上这个{@code state}
 	AuthorizeWithState(state string) (string, *errcode.ErrCode)
 	// 第三方登录
-	Login(authCallback *model.Callback) (*model.AuthResponse, *errcode.ErrCode)
+	Login(callback *model.Callback) (*model.AuthResponse, *errcode.ErrCode)
 	// 撤销授权
-	Revoke(authToken *model.AuthToken) (*model.AuthResponse, *errcode.ErrCode)
+	Revoke(token *model.AuthToken) (*model.AuthResponse, *errcode.ErrCode)
 	// 刷新access token （续期）
-	Refresh(authToken *model.AuthToken) (*model.AuthResponse, *errcode.ErrCode)
+	Refresh(token *model.AuthToken) (*model.AuthResponse, *errcode.ErrCode)
+}
+
+func NewAuthRequest(cfg config.AuthConfig, src source.AuthSource) (AuthRequest, *errcode.ErrCode) {
+	if err := utils.CheckAuth(cfg, src); err != nil {
+		return nil, err
+	}
+	switch src {
+	case source.GITHUB:
+		return newGithubRequest(cfg, src), nil
+	}
+	return nil, errcode.ParameterIncomplete
 }

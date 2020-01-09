@@ -6,6 +6,7 @@ import (
 	"github.com/lhlyu/justauth-go/config"
 	"github.com/lhlyu/justauth-go/model"
 	"github.com/lhlyu/justauth-go/request"
+	"github.com/lhlyu/justauth-go/source"
 	"testing"
 )
 
@@ -14,16 +15,20 @@ const (
 	CLIENT_SECRET = "26074c03ea0167590039f3fb175078a14d864ce1x"
 	REDIRECT_URL  = "http://localhost:8080/login"
 
-	CODE  = "6f0a63b8a8cd963772c4"
+	CODE  = "5fb22e2057e11a93a4b6"
 	STATE = "test"
 )
 
 func TestLogin(t *testing.T) {
-	authRequest := request.NewGithubRequest(config.AuthConfig{
+	authRequest, err := request.NewAuthRequest(config.AuthConfig{
 		ClientId:     CLIENT_ID,
 		ClientSecret: CLIENT_SECRET,
 		RedirectUrl:  REDIRECT_URL,
-	})
+	}, source.GITHUB)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	resp, err := authRequest.Login(&model.Callback{
 		Code:  CODE,
 		State: STATE,
@@ -37,11 +42,15 @@ func TestLogin(t *testing.T) {
 }
 
 func TestAuthorize(t *testing.T) {
-	authRequest := request.NewGithubRequest(config.AuthConfig{
+	authRequest, err := request.NewAuthRequest(config.AuthConfig{
 		ClientId:     CLIENT_ID,
 		ClientSecret: CLIENT_SECRET,
 		RedirectUrl:  REDIRECT_URL,
-	})
+	}, source.GITHUB)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	// 生成授权页面
 	url, err := authRequest.AuthorizeWithState(STATE)
 	if err != nil {
