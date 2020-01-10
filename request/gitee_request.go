@@ -24,12 +24,12 @@ func newGiteeRequest(cfg config.AuthConfig, src source.AuthSource) AuthRequest {
 	return authRequest
 }
 
-// Override 返回授权url，可自行跳转页面
+// Override 返回授权url
 func (this *giteeRequest) Authorize() *result.UrlResult {
 	return this.AuthorizeWithState("")
 }
 
-// Override
+// Override 返回授权url + state
 func (this *giteeRequest) AuthorizeWithState(state string) *result.UrlResult {
 	url := utils.NewUrlBuilder(this.Source.Authorize()).
 		AddParam("response_type", "code").
@@ -39,7 +39,7 @@ func (this *giteeRequest) AuthorizeWithState(state string) *result.UrlResult {
 	return result.Success.WithVal(url).ToUrlResult()
 }
 
-// Override 统一的登录入口
+// Override 登录返回用户信息
 func (this *giteeRequest) Login(callback *model.Callback) *result.UserResult {
 	rs := this.getAccessToken(callback)
 	if !rs.Ok() {

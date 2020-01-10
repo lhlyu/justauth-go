@@ -1,6 +1,7 @@
 package request
 
 import (
+	"errors"
 	"github.com/lhlyu/justauth-go/config"
 	"github.com/lhlyu/justauth-go/model"
 	"github.com/lhlyu/justauth-go/result"
@@ -9,12 +10,11 @@ import (
 )
 
 type AuthRequest interface {
-	// 返回授权url，可自行跳转页面
-	// 不建议使用该方式获取授权地址，不带{@code state}的授权地址，容易受到csrf攻击。
+	// 返回授权URL
 	Authorize() *result.UrlResult
-	// 返回带{@code state}参数的授权url，授权回调时会带上这个{@code state}
+	// 自定义state,返回授权URL
 	AuthorizeWithState(state string) *result.UrlResult
-	// 第三方登录
+	// 登录并返回用户信息
 	Login(callback *model.Callback) *result.UserResult
 	// 撤销授权
 	Revoke(token *model.AuthToken) *result.StatusResult
@@ -22,9 +22,11 @@ type AuthRequest interface {
 	Refresh(token *model.AuthToken) *result.TokenResult
 }
 
-func NewAuthRequest(cfg config.AuthConfig, src source.AuthSource) (AuthRequest, *result.Result) {
-	if rs := utils.CheckAuth(cfg, src); !rs.Ok() {
-		return nil, rs
+var param_error = errors.New("Parameter incomplete")
+
+func NewAuthRequest(cfg config.AuthConfig, src source.AuthSource) (AuthRequest, error) {
+	if !utils.IsSupport(cfg, src) {
+		return nil, param_error
 	}
 	switch src {
 	case source.GITHUB:
@@ -33,6 +35,8 @@ func NewAuthRequest(cfg config.AuthConfig, src source.AuthSource) (AuthRequest, 
 		return newGiteeRequest(cfg, src), nil
 	case source.GITLAB:
 		return newGitlabRequest(cfg, src), nil
+	case source.CODING:
+		return newCodingRequest(cfg, src), nil
 	}
-	return nil, result.ParameterIncomplete
+	return nil, param_error
 }

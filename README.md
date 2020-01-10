@@ -3,52 +3,78 @@
 
 #### 开发进度
 
-- 进行中...
+- [X] Github
+- [X] Gitee
+- [X] Gitlab
+- [X] Coding
+
 
 ## 例子
 
-- github
+- github完整例子
 
 ```go
-// 生成授权URL
-func TestAuthorize(t *testing.T) {
-	authRequest, reqRs := request.NewAuthRequest(config.AuthConfig{
+package main
+
+import (
+	"log"
+    "net/url"
+    "net/http"
+	"encoding/json"
+	
+	"github.com/lhlyu/justauth-go/config"
+	"github.com/lhlyu/justauth-go/model"
+	"github.com/lhlyu/justauth-go/request"
+	"github.com/lhlyu/justauth-go/source"
+
+)
+
+const (
+	CLIENT_ID     = "Iv1.094eec991d1dsdad"                       // 自行申请
+	CLIENT_SECRET = "26074c03ea0167590039f3fb175078a14dsadd23"   // 自行申请
+	REDIRECT_URL  = "http://localhost:8080/login"
+
+	STATE = "test" // 自定义
+)
+
+var authRequest request.AuthRequest
+
+func init(){
+	authRequest, _ = request.NewAuthRequest(config.AuthConfig{
 		ClientId:     CLIENT_ID,
 		ClientSecret: CLIENT_SECRET,
 		RedirectUrl:  REDIRECT_URL,
-	}, source.GITHUB)
-	if !reqRs.Ok() {
-		t.Error(reqRs.Msg())
-		return
-	}
-	rs := authRequest.AuthorizeWithState(STATE)
-	if !rs.Ok() {
-		t.Error(rs.Msg())
-		return
-	}
-	t.Log(rs.Val())
+	}, source.GITHUB)    
 }
 
-// 登录获取用户信息
-func TestLogin(t *testing.T) {
-	authRequest, reqRs := request.NewAuthRequest(config.AuthConfig{
-		ClientId:     CLIENT_ID,
-		ClientSecret: CLIENT_SECRET,
-		RedirectUrl:  REDIRECT_URL,
-	}, source.GITHUB)
-	if !reqRs.Ok() {
-		t.Error(reqRs.Msg())
-		return
-	}
-	rs := authRequest.Login(&model.Callback{
-		Code:  CODE,
-		State: STATE,
-	})
-	if !rs.Ok() {
-		t.Error(rs.Msg())
-		return
-	}
-	bts, _ := json.Marshal(rs.Val())
-	t.Log(string(bts))
+func main(){
+	// 创建两个路由
+	http.HandleFunc("/",Authorize)
+	http.HandleFunc("/login",Login)
+	log.Println("localhost:8080")
+	// 启动一个服务
+	http.ListenAndServe("localhost:8080",nil)
 }
+
+// 生成授权URL
+func Authorize(w http.ResponseWriter, r *http.Request){
+	rs := authRequest.AuthorizeWithState(STATE)
+	w.Write([]byte(rs.Val()))
+}
+
+// 登录并返回用户的个人信息
+func Login(w http.ResponseWriter, r *http.Request){
+	u,_ := url.ParseRequestURI(r.RequestURI)
+	q := u.Query()
+	// 获取参数
+	code := q.Get("code")
+	state := q.Get("test")  // or STATE
+	rs := authRequest.Login(&model.Callback{
+		Code: code,
+		State: state,
+	})
+	bts,_ := json.Marshal(rs.Val())
+	w.Write(bts)
+}
+
 ```

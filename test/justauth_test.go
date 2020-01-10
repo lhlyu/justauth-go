@@ -20,13 +20,13 @@ const (
 
 // 生成授权URL
 func TestAuthorize(t *testing.T) {
-	authRequest, reqRs := request.NewAuthRequest(config.AuthConfig{
+	authRequest, err := request.NewAuthRequest(config.AuthConfig{
 		ClientId:     CLIENT_ID,
 		ClientSecret: CLIENT_SECRET,
 		RedirectUrl:  REDIRECT_URL,
 	}, source.GITHUB)
-	if !reqRs.Ok() {
-		t.Error(reqRs.Msg())
+	if err != nil {
+		t.Error(err)
 		return
 	}
 	rs := authRequest.AuthorizeWithState(STATE)
@@ -39,13 +39,13 @@ func TestAuthorize(t *testing.T) {
 
 // 登录获取用户信息
 func TestLogin(t *testing.T) {
-	authRequest, reqRs := request.NewAuthRequest(config.AuthConfig{
+	authRequest, err := request.NewAuthRequest(config.AuthConfig{
 		ClientId:     CLIENT_ID,
 		ClientSecret: CLIENT_SECRET,
 		RedirectUrl:  REDIRECT_URL,
 	}, source.GITHUB)
-	if !reqRs.Ok() {
-		t.Error(reqRs.Msg())
+	if err != nil {
+		t.Error(err)
 		return
 	}
 	rs := authRequest.Login(&model.Callback{

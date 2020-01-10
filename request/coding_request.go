@@ -9,13 +9,13 @@ import (
 	"github.com/lhlyu/justauth-go/utils"
 )
 
-type githubRequest struct {
+type codingRequest struct {
 	BaseRequest
 }
 
-func newGithubRequest(cfg config.AuthConfig, src source.AuthSource) AuthRequest {
+func newCodingRequest(cfg config.AuthConfig, src source.AuthSource) AuthRequest {
 	var authRequest AuthRequest
-	authRequest = &githubRequest{
+	authRequest = &codingRequest{
 		BaseRequest: BaseRequest{
 			Source: src,
 			Config: cfg,
@@ -25,14 +25,15 @@ func newGithubRequest(cfg config.AuthConfig, src source.AuthSource) AuthRequest 
 }
 
 // Override 返回授权url
-func (this *githubRequest) Authorize() *result.UrlResult {
+func (this *codingRequest) Authorize() *result.UrlResult {
 	return this.AuthorizeWithState("")
 }
 
 // Override 返回授权url + state
-func (this *githubRequest) AuthorizeWithState(state string) *result.UrlResult {
+func (this *codingRequest) AuthorizeWithState(state string) *result.UrlResult {
 	url := utils.NewUrlBuilder(this.Source.Authorize()).
 		AddParam("response_type", "code").
+		AddParam("scope", "user").
 		AddParam("client_id", this.Config.ClientId).
 		AddParam("redirect_uri", this.Config.RedirectUrl).
 		AddParam("state", this.GetState(state)).Build()
@@ -40,7 +41,7 @@ func (this *githubRequest) AuthorizeWithState(state string) *result.UrlResult {
 }
 
 // Override 登录返回用户信息
-func (this *githubRequest) Login(callback *model.Callback) *result.UserResult {
+func (this *codingRequest) Login(callback *model.Callback) *result.UserResult {
 	rs := this.getAccessToken(callback)
 	if !rs.Ok() {
 		return rs.ToUserResult()
@@ -52,7 +53,7 @@ func (this *githubRequest) Login(callback *model.Callback) *result.UserResult {
 	return rs.ToUserResult()
 }
 
-func (this *githubRequest) getAccessToken(callback *model.Callback) *result.Result {
+func (this *codingRequest) getAccessToken(callback *model.Callback) *result.Result {
 	url := utils.NewUrlBuilder(this.Source.AccessToken()).
 		AddParam("code", callback.Code).
 		AddParam("client_id", this.Config.ClientId).
@@ -69,14 +70,14 @@ func (this *githubRequest) getAccessToken(callback *model.Callback) *result.Resu
 		return result.Failure.WithMsg(desc)
 	}
 	token := &model.AuthToken{
-		AccessToken: m["access_token"],
-		Scope:       m["scope"],
-		TokenType:   m["token_type"],
+		AccessToken:  m["access_token"],
+		ExpireIn:     m["expires_in"],
+		RefreshToken: m["refresh_token"],
 	}
 	return result.Success.WithVal(token)
 }
 
-func (this *githubRequest) getUserInfo(authToken *model.AuthToken) *result.Result {
+func (this *codingRequest) getUserInfo(authToken *model.AuthToken) *result.Result {
 	url := utils.NewUrlBuilder(this.Source.UserInfo()).
 		AddParam("access_token", authToken.AccessToken).Build()
 	body, err := utils.Get(url)
@@ -90,15 +91,15 @@ func (this *githubRequest) getUserInfo(authToken *model.AuthToken) *result.Resul
 	}
 	user := &model.AuthUser{
 		UUID:     m["id"],
-		UserName: m["login"],
-		Avatar:   m["avatar_url"],
-		Blog:     m["blog"],
+		UserName: m["name"],
+		Avatar:   "https://coding.net/" + m["avatar"],
+		Blog:     "https://coding.net/" + m["path"],
 		NickName: m["name"],
 		Company:  m["company"],
 		Location: m["location"],
 		Email:    m["email"],
-		Remark:   m["bio"],
-		Gender:   enum.GetRealGender("").Desc,
+		Remark:   m["slogan"],
+		Gender:   enum.GetRealGender(m["sex"]).Desc,
 		Token:    authToken,
 		Source:   this.Source.ToString(),
 	}
