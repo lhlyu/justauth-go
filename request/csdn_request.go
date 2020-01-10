@@ -9,13 +9,13 @@ import (
 	"github.com/lhlyu/justauth-go/utils"
 )
 
-type giteeRequest struct {
+type csdnRequest struct {
 	BaseRequest
 }
 
-func newGiteeRequest(cfg config.AuthConfig, src source.AuthSource) AuthRequest {
+func newCsdnRequest(cfg config.AuthConfig, src source.AuthSource) AuthRequest {
 	var authRequest AuthRequest
-	authRequest = &giteeRequest{
+	authRequest = &csdnRequest{
 		BaseRequest: BaseRequest{
 			Source: src,
 			Config: cfg,
@@ -25,12 +25,12 @@ func newGiteeRequest(cfg config.AuthConfig, src source.AuthSource) AuthRequest {
 }
 
 // Override 返回授权url
-func (this *giteeRequest) Authorize() *result.UrlResult {
+func (this *csdnRequest) Authorize() *result.UrlResult {
 	return this.AuthorizeWithState("")
 }
 
 // Override 返回授权url + state
-func (this *giteeRequest) AuthorizeWithState(state string) *result.UrlResult {
+func (this *csdnRequest) AuthorizeWithState(state string) *result.UrlResult {
 	url := utils.NewUrlBuilder(this.Source.Authorize()).
 		AddParam("response_type", "code").
 		AddParam("client_id", this.Config.ClientId).
@@ -40,7 +40,7 @@ func (this *giteeRequest) AuthorizeWithState(state string) *result.UrlResult {
 }
 
 // Override 登录返回用户信息
-func (this *giteeRequest) Login(callback *model.Callback) *result.UserResult {
+func (this *csdnRequest) Login(callback *model.Callback) *result.UserResult {
 	rs := this.getAccessToken(callback)
 	if !rs.Ok() {
 		return rs.ToUserResult()
@@ -54,7 +54,7 @@ func (this *giteeRequest) Login(callback *model.Callback) *result.UserResult {
 
 // ------------------------------------------------------------------
 
-func (this *giteeRequest) getAccessToken(callback *model.Callback) *result.Result {
+func (this *csdnRequest) getAccessToken(callback *model.Callback) *result.Result {
 	url := utils.NewUrlBuilder(this.Source.AccessToken()).
 		AddParam("code", callback.Code).
 		AddParam("client_id", this.Config.ClientId).
@@ -68,7 +68,7 @@ func (this *giteeRequest) getAccessToken(callback *model.Callback) *result.Resul
 	return this.getToken(body)
 }
 
-func (this *giteeRequest) getUserInfo(authToken *model.AuthToken) *result.Result {
+func (this *csdnRequest) getUserInfo(authToken *model.AuthToken) *result.Result {
 	url := utils.NewUrlBuilder(this.Source.UserInfo()).
 		AddParam("access_token", authToken.AccessToken).Build()
 	body, err := utils.Get(url)
@@ -80,15 +80,10 @@ func (this *giteeRequest) getUserInfo(authToken *model.AuthToken) *result.Result
 		return result.Failure.WithMsg(m["error_description"])
 	}
 	user := &model.AuthUser{
-		UUID:     m["id"],
-		UserName: m["login"],
-		Avatar:   m["avatar_url"],
-		Blog:     m["blog"],
-		NickName: m["name"],
-		Company:  m["company"],
-		Location: m["address"],
-		Email:    m["email"],
-		Remark:   m["bio"],
+		UUID:     m["username"],
+		UserName: m["username"],
+		Blog:     m["website"],
+		Remark:   m["description"],
 		Gender:   enum.GetRealGender("").Desc,
 		Token:    authToken,
 		Source:   this.Source.ToString(),
@@ -96,17 +91,14 @@ func (this *giteeRequest) getUserInfo(authToken *model.AuthToken) *result.Result
 	return result.Success.WithVal(user)
 }
 
-func (this *giteeRequest) getToken(body string) *result.Result {
+func (this *csdnRequest) getToken(body string) *result.Result {
 	m := utils.StrToMSS(body)
 	if _, ok := m["error"]; ok {
-		return result.Failure.WithMsg(m["error_description"])
+		desc := m["error_description"]
+		return result.Failure.WithMsg(desc)
 	}
 	token := &model.AuthToken{
-		AccessToken:  m["access_token"],
-		RefreshToken: m["refresh_token"],
-		ExpireIn:     m["expires_in"],
-		Scope:        m["scope"],
-		TokenType:    m["token_type"],
+		AccessToken: m["access_token"],
 	}
 	return result.Success.WithVal(token)
 }

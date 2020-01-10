@@ -53,6 +53,8 @@ func (this *codingRequest) Login(callback *model.Callback) *result.UserResult {
 	return rs.ToUserResult()
 }
 
+// ------------------------------------------------------------------
+
 func (this *codingRequest) getAccessToken(callback *model.Callback) *result.Result {
 	url := utils.NewUrlBuilder(this.Source.AccessToken()).
 		AddParam("code", callback.Code).
@@ -64,17 +66,7 @@ func (this *codingRequest) getAccessToken(callback *model.Callback) *result.Resu
 	if err != nil {
 		return result.Failure.WithErr(err)
 	}
-	m := utils.StrToMSS(body)
-	if _, ok := m["error"]; ok {
-		desc := m["error_description"]
-		return result.Failure.WithMsg(desc)
-	}
-	token := &model.AuthToken{
-		AccessToken:  m["access_token"],
-		ExpireIn:     m["expires_in"],
-		RefreshToken: m["refresh_token"],
-	}
-	return result.Success.WithVal(token)
+	return this.getToken(body)
 }
 
 func (this *codingRequest) getUserInfo(authToken *model.AuthToken) *result.Result {
@@ -86,8 +78,7 @@ func (this *codingRequest) getUserInfo(authToken *model.AuthToken) *result.Resul
 	}
 	m := utils.JsonToMSS(body)
 	if _, ok := m["error"]; ok {
-		desc := m["error_description"]
-		return result.Failure.WithMsg(desc)
+		return result.Failure.WithMsg(m["error_description"])
 	}
 	user := &model.AuthUser{
 		UUID:     m["id"],
@@ -104,4 +95,17 @@ func (this *codingRequest) getUserInfo(authToken *model.AuthToken) *result.Resul
 		Source:   this.Source.ToString(),
 	}
 	return result.Success.WithVal(user)
+}
+
+func (this *codingRequest) getToken(body string) *result.Result {
+	m := utils.StrToMSS(body)
+	if _, ok := m["error"]; ok {
+		return result.Failure.WithMsg(m["error_description"])
+	}
+	token := &model.AuthToken{
+		AccessToken:  m["access_token"],
+		ExpireIn:     m["expires_in"],
+		RefreshToken: m["refresh_token"],
+	}
+	return result.Success.WithVal(token)
 }

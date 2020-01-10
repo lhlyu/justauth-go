@@ -7,7 +7,8 @@
 - [X] Gitee
 - [X] Gitlab
 - [X] Coding
-
+- [X] CSDN
+- [X] QQ
 
 ## 例子
 
@@ -32,7 +33,7 @@ import (
 const (
 	CLIENT_ID     = "Iv1.094eec991d1dsdad"                       // 自行申请
 	CLIENT_SECRET = "26074c03ea0167590039f3fb175078a14dsadd23"   // 自行申请
-	REDIRECT_URL  = "http://localhost:8080/login"
+	REDIRECT_URL  = "http://localhost:8080/login"                // 授权回调地址
 
 	STATE = "test" // 自定义
 )

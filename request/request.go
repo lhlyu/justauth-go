@@ -37,6 +37,10 @@ func NewAuthRequest(cfg config.AuthConfig, src source.AuthSource) (AuthRequest, 
 		return newGitlabRequest(cfg, src), nil
 	case source.CODING:
 		return newCodingRequest(cfg, src), nil
+	case source.CSDN:
+		return newCsdnRequest(cfg, src), nil
+	case source.QQ:
+		return newQqRequest(cfg, src), nil
 	}
 	return nil, param_error
 }
