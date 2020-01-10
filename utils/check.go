@@ -2,11 +2,11 @@ package utils
 
 import (
 	"github.com/lhlyu/justauth-go/config"
-	"github.com/lhlyu/justauth-go/errcode"
+	"github.com/lhlyu/justauth-go/result"
 	"github.com/lhlyu/justauth-go/source"
 )
 
-func CheckAuth(cfg config.AuthConfig, src source.AuthSource) *errcode.ErrCode {
+func CheckAuth(cfg config.AuthConfig, src source.AuthSource) *result.Result {
 	isSupported := true
 	if cfg.ClientId == "" || cfg.ClientSecret == "" || cfg.RedirectUrl == "" {
 		isSupported = false
@@ -21,7 +21,7 @@ func CheckAuth(cfg config.AuthConfig, src source.AuthSource) *errcode.ErrCode {
 		isSupported = cfg.AgentId != ""
 	}
 	if !isSupported {
-		return errcode.ParameterIncomplete
+		return result.ParameterIncomplete
 	}
 	return nil
 }

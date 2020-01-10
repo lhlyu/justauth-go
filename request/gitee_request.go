@@ -3,8 +3,8 @@ package request
 import (
 	"github.com/lhlyu/justauth-go/config"
 	"github.com/lhlyu/justauth-go/enum"
-	"github.com/lhlyu/justauth-go/errcode"
 	"github.com/lhlyu/justauth-go/model"
+	"github.com/lhlyu/justauth-go/result"
 	"github.com/lhlyu/justauth-go/source"
 	"github.com/lhlyu/justauth-go/utils"
 )
@@ -25,33 +25,34 @@ func newGiteeRequest(cfg config.AuthConfig, src source.AuthSource) AuthRequest {
 }
 
 // Override 返回授权url，可自行跳转页面
-func (this *giteeRequest) Authorize() (string, *errcode.ErrCode) {
+func (this *giteeRequest) Authorize() *result.UrlResult {
 	return this.AuthorizeWithState("")
 }
 
 // Override
-func (this *giteeRequest) AuthorizeWithState(state string) (string, *errcode.ErrCode) {
-	return utils.NewUrlBuilder(this.Source.Authorize()).
+func (this *giteeRequest) AuthorizeWithState(state string) *result.UrlResult {
+	url := utils.NewUrlBuilder(this.Source.Authorize()).
 		AddParam("response_type", "code").
 		AddParam("client_id", this.Config.ClientId).
 		AddParam("redirect_uri", this.Config.RedirectUrl).
-		AddParam("state", this.GetState(state)).Build(), nil
+		AddParam("state", this.GetState(state)).Build()
+	return result.Success.WithVal(url).ToUrlResult()
 }
 
 // Override 统一的登录入口
-func (this *giteeRequest) Login(callback *model.Callback) (*model.AuthUser, *errcode.ErrCode) {
-	authToken, err := this.getAccessToken(callback)
-	if err != nil {
-		return nil, err
+func (this *giteeRequest) Login(callback *model.Callback) *result.UserResult {
+	rs := this.getAccessToken(callback)
+	if !rs.Ok() {
+		return rs.ToUserResult()
 	}
-	authUser, err := this.getUserInfo(authToken)
-	if err != nil {
-		return nil, err
+	rs = this.getUserInfo(rs.ToTokenResult().Val())
+	if !rs.Ok() {
+		return rs.ToUserResult()
 	}
-	return authUser, nil
+	return rs.ToUserResult()
 }
 
-func (this *giteeRequest) getAccessToken(callback *model.Callback) (*model.AuthToken, *errcode.ErrCode) {
+func (this *giteeRequest) getAccessToken(callback *model.Callback) *result.Result {
 	url := utils.NewUrlBuilder(this.Source.AccessToken()).
 		AddParam("code", callback.Code).
 		AddParam("client_id", this.Config.ClientId).
@@ -60,35 +61,36 @@ func (this *giteeRequest) getAccessToken(callback *model.Callback) (*model.AuthT
 		AddParam("redirect_uri", this.Config.RedirectUrl).Build()
 	body, err := utils.Post(url)
 	if err != nil {
-		return nil, err
+		return result.Failure.WithErr(err)
 	}
 	m := utils.StrToMSS(body)
 	if _, ok := m["error"]; ok {
 		desc := m["error_description"]
-		return nil, errcode.Failure.WithMsg(desc)
+		return result.Failure.WithMsg(desc)
 	}
-	return &model.AuthToken{
+	token := &model.AuthToken{
 		AccessToken:  m["access_token"],
 		RefreshToken: m["refresh_token"],
 		ExpireIn:     m["expires_in"],
 		Scope:        m["scope"],
 		TokenType:    m["token_type"],
-	}, nil
+	}
+	return result.Success.WithVal(token)
 }
 
-func (this *giteeRequest) getUserInfo(authToken *model.AuthToken) (*model.AuthUser, *errcode.ErrCode) {
+func (this *giteeRequest) getUserInfo(authToken *model.AuthToken) *result.Result {
 	url := utils.NewUrlBuilder(this.Source.UserInfo()).
 		AddParam("access_token", authToken.AccessToken).Build()
 	body, err := utils.Get(url)
 	if err != nil {
-		return nil, err
+		return result.Failure.WithErr(err)
 	}
 	m := utils.JsonToMSS(body)
 	if _, ok := m["error"]; ok {
 		desc := m["error_description"]
-		return nil, errcode.Failure.WithMsg(desc)
+		return result.Failure.WithMsg(desc)
 	}
-	return &model.AuthUser{
+	user := &model.AuthUser{
 		UUID:     m["id"],
 		UserName: m["login"],
 		Avatar:   m["avatar_url"],
@@ -101,5 +103,6 @@ func (this *giteeRequest) getUserInfo(authToken *model.AuthToken) (*model.AuthUs
 		Gender:   enum.GetRealGender("").Desc,
 		Token:    authToken,
 		Source:   this.Source.ToString(),
-	}, nil
+	}
+	return result.Success.WithVal(user)
 }

@@ -1,4 +1,4 @@
-package errcode
+package result
 
 const (
 	EC0 = iota

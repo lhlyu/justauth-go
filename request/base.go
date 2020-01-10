@@ -2,8 +2,8 @@ package request
 
 import (
 	"github.com/lhlyu/justauth-go/config"
-	"github.com/lhlyu/justauth-go/errcode"
 	"github.com/lhlyu/justauth-go/model"
+	"github.com/lhlyu/justauth-go/result"
 	"github.com/lhlyu/justauth-go/source"
 	"github.com/lhlyu/justauth-go/utils"
 )
@@ -20,22 +20,27 @@ func (*BaseRequest) GetState(state string) string {
 	return state
 }
 
-func (*BaseRequest) Authorize() (string, *errcode.ErrCode) {
-	return "", errcode.NotImplemented
+// 生成授权URL
+func (*BaseRequest) Authorize() *result.UrlResult {
+	return result.NotImplemented.ToUrlResult()
 }
 
-func (*BaseRequest) AuthorizeWithState(state string) (string, *errcode.ErrCode) {
-	return "", errcode.NotImplemented
+// 生成授权URL
+func (*BaseRequest) AuthorizeWithState(state string) *result.UrlResult {
+	return result.NotImplemented.ToUrlResult()
 }
 
-func (*BaseRequest) Login(callback *model.Callback) (*model.AuthUser, *errcode.ErrCode) {
-	return nil, errcode.NotImplemented
+// 登录返回用户信息
+func (*BaseRequest) Login(callback *model.Callback) *result.UserResult {
+	return result.NotImplemented.ToUserResult()
 }
 
-func (*BaseRequest) Revoke(token *model.AuthToken) *errcode.ErrCode {
-	return errcode.NotImplemented
+// 撤销授权,返回状态
+func (*BaseRequest) Revoke(token *model.AuthToken) *result.StatusResult {
+	return result.NotImplemented.ToStatusResult()
 }
 
-func (*BaseRequest) Refresh(token *model.AuthToken) (*model.AuthResponse, *errcode.ErrCode) {
-	return nil, errcode.NotImplemented
+// 刷新token，返回新token
+func (*BaseRequest) Refresh(token *model.AuthToken) *result.TokenResult {
+	return result.NotImplemented.ToTokenResult()
 }

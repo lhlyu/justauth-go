@@ -1,4 +1,4 @@
-package errcode
+package result
 
 const (
 	SUCCESS = 2000
@@ -28,4 +28,15 @@ var ResponseStatusMap = map[int]string{
 	ILLEGAL_CODE:           "Illegal code",
 	ILLEGAL_STATUS:         "Illegal state",
 	REQUIRED_REFRESH_TOKEN: "The refresh token is required; it must not be null",
+}
+
+var (
+	Success             = NewRs(SUCCESS)
+	Failure             = NewRs(FAILURE)
+	NotImplemented      = NewRs(NOT_IMPLEMENTED)
+	ParameterIncomplete = NewRs(PARAMETER_INCOMPLETE)
+)
+
+func NewRs(code int) *Result {
+	return NewResult(code, ResponseStatusMap[code])
 }
