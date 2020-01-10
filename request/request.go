@@ -31,6 +31,8 @@ func NewAuthRequest(cfg config.AuthConfig, src source.AuthSource) (AuthRequest, 
 		return newGiteeRequest(cfg, src), nil
 	case source.GITEE:
 		return newGiteeRequest(cfg, src), nil
+	case source.GITLAB:
+		return newGitlabRequest(cfg, src), nil
 	}
 	return nil, result.ParameterIncomplete
 }

@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	CLIENT_ID     = "Iv1.094eec991d1d290d"
-	CLIENT_SECRET = "26074c03ea0167590039f3fb175078a14d864ce1"
+	CLIENT_ID     = "Iv1.094eec991d1d290dx"
+	CLIENT_SECRET = "26074c03ea0167590039f3fb175078a14d864ce1x"
 	REDIRECT_URL  = "http://localhost:8080/login"
 
 	CODE  = "85d27e8e172ecfbbbc6d"
