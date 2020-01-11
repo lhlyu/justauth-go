@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	CLIENT_ID     = "Iv1.094eec991d1d290da"                     // 自行申请
-	CLIENT_SECRET = "26074c03ea0167590039f3fb175078a14d864ce1i" // 自行申请
+	CLIENT_ID     = "a71fffee035f0ec7dc3689651561df09a30fbace6f956f31a9e67bb77de55de1x" // 自行申请
+	CLIENT_SECRET = "024de2d0fc304b0294a1fc2cead10a45b9b0f18cf6af2dcafce73729171813d4y" // 自行申请
 	REDIRECT_URL  = "http://localhost:8080/login"
 
 	STATE = "test"
@@ -26,7 +26,7 @@ func init() {
 		ClientId:     CLIENT_ID,
 		ClientSecret: CLIENT_SECRET,
 		RedirectUrl:  REDIRECT_URL,
-	}, source.GITHUB)
+	}, source.GITEE)
 }
 
 func main() {

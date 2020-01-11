@@ -30,7 +30,7 @@ func NewAuthRequest(cfg config.AuthConfig, src source.AuthSource) (AuthRequest, 
 	}
 	switch src {
 	case source.GITHUB:
-		return newGiteeRequest(cfg, src), nil
+		return newGithubRequest(cfg, src), nil
 	case source.GITEE:
 		return newGiteeRequest(cfg, src), nil
 	case source.GITLAB:

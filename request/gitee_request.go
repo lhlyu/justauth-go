@@ -97,7 +97,7 @@ func (this *giteeRequest) getUserInfo(authToken *model.AuthToken) *result.Result
 }
 
 func (this *giteeRequest) getToken(body string) *result.Result {
-	m := utils.StrToMSS(body)
+	m := utils.JsonToMSS(body)
 	if _, ok := m["error"]; ok {
 		return result.Failure.WithMsg(m["error_description"])
 	}
