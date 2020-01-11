@@ -9,6 +9,7 @@ import (
 	"github.com/lhlyu/justauth-go/utils"
 )
 
+// todo  有疑点
 type csdnRequest struct {
 	BaseRequest
 }

@@ -7,7 +7,6 @@
 - [X] Gitee
 - [X] Gitlab
 - [X] Coding
-- [X] CSDN
 - [X] QQ
 
 ## 例子
