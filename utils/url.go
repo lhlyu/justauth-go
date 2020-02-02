@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// build url with param
 type UrlBuilder struct {
 	baseUrl string
 	params  url.Values

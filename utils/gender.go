@@ -1,4 +1,4 @@
-package enum
+package utils
 
 import (
 	"strconv"
@@ -37,6 +37,7 @@ func GetRealGender(originalGender string) *AuthUserGender {
 	return &AuthUserGender{FEMALE, GenderMap[FEMALE]}
 }
 
+// for wechat real gender
 func GetWechatRealGender(originalGender string) *AuthUserGender {
 	if originalGender == "" || originalGender == "0" {
 		return &AuthUserGender{UNKNOWN, GenderMap[UNKNOWN]}

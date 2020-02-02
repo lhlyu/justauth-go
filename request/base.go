@@ -2,7 +2,7 @@ package request
 
 import (
 	"github.com/lhlyu/justauth-go/config"
-	"github.com/lhlyu/justauth-go/model"
+	"github.com/lhlyu/justauth-go/entity"
 	"github.com/lhlyu/justauth-go/result"
 	"github.com/lhlyu/justauth-go/source"
 	"github.com/lhlyu/justauth-go/utils"
@@ -11,6 +11,11 @@ import (
 type BaseRequest struct {
 	Config config.AuthConfig
 	Source source.AuthSource
+}
+
+func (this *BaseRequest) Set(cfg config.AuthConfig, src source.AuthSource) {
+	this.Config = cfg
+	this.Source = src
 }
 
 func (*BaseRequest) GetState(state string) string {
@@ -31,16 +36,16 @@ func (*BaseRequest) AuthorizeWithState(state string) *result.UrlResult {
 }
 
 // 登录返回用户信息
-func (*BaseRequest) Login(callback *model.Callback) *result.UserResult {
+func (*BaseRequest) Login(callback *entity.Callback) *result.UserResult {
 	return result.NotImplemented.ToUserResult()
 }
 
 // 撤销授权,返回状态
-func (*BaseRequest) Revoke(token *model.AuthToken) *result.StatusResult {
+func (*BaseRequest) Revoke(token *entity.Token) *result.StatusResult {
 	return result.NotImplemented.ToStatusResult()
 }
 
 // 刷新token，返回新token
-func (*BaseRequest) Refresh(token *model.AuthToken) *result.TokenResult {
+func (*BaseRequest) Refresh(token *entity.Token) *result.TokenResult {
 	return result.NotImplemented.ToTokenResult()
 }

@@ -12,405 +12,405 @@ type AuthSource interface {
 	// 刷新授权的api
 	Refresh() string
 	// 获取当前授权来源
-	ToString() string
+	Name() string
 }
 
 // 32
 var (
-	GITHUB            = &GithubSource{}           // Github
-	WEIBO             = &WeiboSource{}            // 新浪微博
-	GITEE             = &GiteeSource{}            // gitee
-	DINGTALK          = &DingtalkSource{}         // 钉钉
-	BAIDU             = &BaiduSource{}            // 百度
-	CSDN              = &CsdnSource{}             // csdn
-	CODING            = &CodingSource{}           // Coding
-	TENCENT_CLOUD     = &TencentCloudSource{}     // 腾讯云开发者平台（coding升级后就变成腾讯云开发者平台了）
-	OSCHINA           = &OschinaSource{}          // oschina 开源中国
-	ALIPAY            = &AlipaySource{}           // 支付宝
-	QQ                = &QQSource{}               // QQ
-	WECHAT_OPEN       = &WechatOpenSource{}       // 微信开放平台
-	WECHAT_MP         = &WechatMpSource{}         // 微信公众平台
-	TAOBAO            = &TaobaoSource{}           // 淘宝
-	GOOGLE            = &GoogleSource{}           // Google
-	FACEBOOK          = &FacebookSource{}         // Facebook
-	DOUYIN            = &DouyinSource{}           // 抖音
-	LINKEDIN          = &LinkedinSource{}         // 领英
-	MICROSOFT         = &MicrosoftSource{}        // 微软
-	MI                = &MiSource{}               // 小米
-	TOUTIAO           = &ToutiaoSource{}          // 今日头条
-	TEAMBITION        = &TeambitionSource{}       // Teambition
-	RENREN            = &RenrenSource{}           // 人人网
-	PINTEREST         = &PinterestSource{}        // Pinterest
-	STACK_OVERFLOW    = &StackOverflowSource{}    // Stack Overflow
-	HUAWEI            = &HuaweiSource{}           // 华为
-	WECHAT_ENTERPRISE = &WechatEnterpriseSource{} // 企业微信
-	KUJIALE           = &KujialeSource{}          // 酷家乐
-	GITLAB            = &GitlabSource{}           // Gitlab
-	MEITUAN           = &MeituanSource{}          // 美团
-	ELEME             = &ElemeSource{}            // 饿了么
-	TWITTER           = &TwitterSource{}          // Twitter
+	GITHUB = &githubSource{} // Github
+	//WEIBO             = &weiboSource{}            // 新浪微博
+	GITEE = &giteeSource{} // gitee
+	//DINGTALK          = &dingtalkSource{}         // 钉钉
+	//BAIDU             = &baiduSource{}            // 百度
+	//CSDN              = &csdnSource{}             // csdn
+	//CODING            = &codingSource{}           // Coding
+	//TENCENT_CLOUD     = &tencentCloudSource{}     // 腾讯云开发者平台（coding升级后就变成腾讯云开发者平台了）
+	//OSCHINA           = &oschinaSource{}          // oschina 开源中国
+	//ALIPAY            = &alipaySource{}           // 支付宝
+	//QQ                = &qqSource{}               // QQ
+	//WECHAT_OPEN       = &wechatOpenSource{}       // 微信开放平台
+	//WECHAT_MP         = &wechatMpSource{}         // 微信公众平台
+	//TAOBAO            = &taobaoSource{}           // 淘宝
+	//GOOGLE            = &googleSource{}           // Google
+	//FACEBOOK          = &facebookSource{}         // Facebook
+	//DOUYIN            = &douyinSource{}           // 抖音
+	//LINKEDIN          = &linkedinSource{}         // 领英
+	//MICROSOFT         = &microsoftSource{}        // 微软
+	//MI                = &miSource{}               // 小米
+	//TOUTIAO           = &toutiaoSource{}          // 今日头条
+	//TEAMBITION        = &teambitionSource{}       // Teambition
+	//RENREN            = &renrenSource{}           // 人人网
+	//PINTEREST         = &pinterestSource{}        // Pinterest
+	//STACK_OVERFLOW    = &stackOverflowSource{}    // Stack Overflow
+	//HUAWEI            = &huaweiSource{}           // 华为
+	//WECHAT_ENTERPRISE = &wechatEnterpriseSource{} // 企业微信
+	//KUJIALE           = &kujialeSource{}          // 酷家乐
+	//GITLAB            = &gitlabSource{}           // Gitlab
+	//MEITUAN           = &meituanSource{}          // 美团
+	//ELEME             = &elemeSource{}            // 饿了么
+	//TWITTER           = &twitterSource{}          // Twitter
 )
 
 // Github
-type GithubSource struct{}
+type githubSource struct{}
 
-func (*GithubSource) Authorize() string   { return "https://github.com/login/oauth/authorize" }
-func (*GithubSource) AccessToken() string { return "https://github.com/login/oauth/access_token" }
-func (*GithubSource) UserInfo() string    { return "https://api.github.com/user" }
-func (*GithubSource) Revoke() string      { return "" }
-func (*GithubSource) Refresh() string     { return "" }
-func (*GithubSource) ToString() string    { return "Github" }
+func (*githubSource) Authorize() string   { return "https://github.com/login/oauth/authorize" }
+func (*githubSource) AccessToken() string { return "https://github.com/login/oauth/access_token" }
+func (*githubSource) UserInfo() string    { return "https://api.github.com/user" }
+func (*githubSource) Revoke() string      { return "" }
+func (*githubSource) Refresh() string     { return "" }
+func (*githubSource) Name() string        { return "Github" }
 
 // 新浪微博
-type WeiboSource struct{}
+type weiboSource struct{}
 
-func (*WeiboSource) Authorize() string   { return "https://api.weibo.com/oauth2/authorize" }
-func (*WeiboSource) AccessToken() string { return "https://api.weibo.com/oauth2/access_token" }
-func (*WeiboSource) UserInfo() string    { return "https://api.weibo.com/2/users/show.json" }
-func (*WeiboSource) Revoke() string      { return "https://api.weibo.com/oauth2/revokeoauth2" }
-func (*WeiboSource) Refresh() string     { return "" }
-func (*WeiboSource) ToString() string    { return "Weibo" }
+func (*weiboSource) Authorize() string   { return "https://api.weibo.com/oauth2/authorize" }
+func (*weiboSource) AccessToken() string { return "https://api.weibo.com/oauth2/access_token" }
+func (*weiboSource) UserInfo() string    { return "https://api.weibo.com/2/users/show.json" }
+func (*weiboSource) Revoke() string      { return "https://api.weibo.com/oauth2/revokeoauth2" }
+func (*weiboSource) Refresh() string     { return "" }
+func (*weiboSource) Name() string        { return "Weibo" }
 
 // gitee
-type GiteeSource struct{}
+type giteeSource struct{}
 
-func (*GiteeSource) Authorize() string   { return "https://gitee.com/oauth/authorize" }
-func (*GiteeSource) AccessToken() string { return "https://gitee.com/oauth/token" }
-func (*GiteeSource) UserInfo() string    { return "https://gitee.com/api/v5/user" }
-func (*GiteeSource) Revoke() string      { return "" }
-func (*GiteeSource) Refresh() string     { return "" }
-func (*GiteeSource) ToString() string    { return "Gitee" }
+func (*giteeSource) Authorize() string   { return "https://gitee.com/oauth/authorize" }
+func (*giteeSource) AccessToken() string { return "https://gitee.com/oauth/token" }
+func (*giteeSource) UserInfo() string    { return "https://gitee.com/api/v5/user" }
+func (*giteeSource) Revoke() string      { return "" }
+func (*giteeSource) Refresh() string     { return "https://gitee.com/oauth/token" }
+func (*giteeSource) Name() string        { return "Gitee" }
 
 // 钉钉
-type DingtalkSource struct{}
+type dingtalkSource struct{}
 
-func (*DingtalkSource) Authorize() string   { return "https://oapi.dingtalk.com/connect/qrconnect" }
-func (*DingtalkSource) AccessToken() string { return "w AuthException(AuthResponseStatus.UNSUPPORTED" }
-func (*DingtalkSource) UserInfo() string    { return "https://oapi.dingtalk.com/sns/getuserinfo_bycode" }
-func (*DingtalkSource) Revoke() string      { return "" }
-func (*DingtalkSource) Refresh() string     { return "" }
-func (*DingtalkSource) ToString() string    { return "Dingtalk" }
+func (*dingtalkSource) Authorize() string   { return "https://oapi.dingtalk.com/connect/qrconnect" }
+func (*dingtalkSource) AccessToken() string { return "w AuthException(AuthResponseStatus.UNSUPPORTED" }
+func (*dingtalkSource) UserInfo() string    { return "https://oapi.dingtalk.com/sns/getuserinfo_bycode" }
+func (*dingtalkSource) Revoke() string      { return "" }
+func (*dingtalkSource) Refresh() string     { return "" }
+func (*dingtalkSource) Name() string        { return "Dingtalk" }
 
 // 百度
-type BaiduSource struct{}
+type baiduSource struct{}
 
-func (*BaiduSource) Authorize() string   { return "https://openapi.baidu.com/oauth/2.0/authorize" }
-func (*BaiduSource) AccessToken() string { return "https://openapi.baidu.com/oauth/2.0/token" }
-func (*BaiduSource) UserInfo() string {
+func (*baiduSource) Authorize() string   { return "https://openapi.baidu.com/oauth/2.0/authorize" }
+func (*baiduSource) AccessToken() string { return "https://openapi.baidu.com/oauth/2.0/token" }
+func (*baiduSource) UserInfo() string {
 	return "https://openapi.baidu.com/rest/2.0/passport/users/getInfo"
 }
-func (*BaiduSource) Revoke() string {
+func (*baiduSource) Revoke() string {
 	return "https://openapi.baidu.com/rest/2.0/passport/auth/revokeAuthorization"
 }
-func (*BaiduSource) Refresh() string  { return "https://openapi.baidu.com/oauth/2.0/token" }
-func (*BaiduSource) ToString() string { return "Baidu" }
+func (*baiduSource) Refresh() string { return "https://openapi.baidu.com/oauth/2.0/token" }
+func (*baiduSource) Name() string    { return "Baidu" }
 
 // csdn
-type CsdnSource struct{}
+type csdnSource struct{}
 
-func (*CsdnSource) Authorize() string   { return "https://api.csdn.net/oauth2/authorize" }
-func (*CsdnSource) AccessToken() string { return "https://api.csdn.net/oauth2/access_token" }
-func (*CsdnSource) UserInfo() string    { return "https://api.csdn.net/user/getinfo" }
-func (*CsdnSource) Revoke() string      { return "" }
-func (*CsdnSource) Refresh() string     { return "" }
-func (*CsdnSource) ToString() string    { return "Csdn" }
+func (*csdnSource) Authorize() string   { return "https://api.csdn.net/oauth2/authorize" }
+func (*csdnSource) AccessToken() string { return "https://api.csdn.net/oauth2/access_token" }
+func (*csdnSource) UserInfo() string    { return "https://api.csdn.net/user/getinfo" }
+func (*csdnSource) Revoke() string      { return "" }
+func (*csdnSource) Refresh() string     { return "" }
+func (*csdnSource) Name() string        { return "Csdn" }
 
 // Coding
-type CodingSource struct{}
+type codingSource struct{}
 
-func (*CodingSource) Authorize() string   { return "https://coding.net/oauth_authorize.html" }
-func (*CodingSource) AccessToken() string { return "https://coding.net/api/oauth/access_token" }
-func (*CodingSource) UserInfo() string    { return "https://coding.net/api/account/current_user" }
-func (*CodingSource) Revoke() string      { return "" }
-func (*CodingSource) Refresh() string     { return "" }
-func (*CodingSource) ToString() string    { return "Coding" }
+func (*codingSource) Authorize() string   { return "https://coding.net/oauth_authorize.html" }
+func (*codingSource) AccessToken() string { return "https://coding.net/api/oauth/access_token" }
+func (*codingSource) UserInfo() string    { return "https://coding.net/api/account/current_user" }
+func (*codingSource) Revoke() string      { return "" }
+func (*codingSource) Refresh() string     { return "" }
+func (*codingSource) Name() string        { return "Coding" }
 
 // 腾讯云开发者平台（coding升级后就变成腾讯云开发者平台了）
-type TencentCloudSource struct{}
+type tencentCloudSource struct{}
 
-func (*TencentCloudSource) Authorize() string { return "https://dev.tencent.com/oauth_authorize.html" }
-func (*TencentCloudSource) AccessToken() string {
+func (*tencentCloudSource) Authorize() string { return "https://dev.tencent.com/oauth_authorize.html" }
+func (*tencentCloudSource) AccessToken() string {
 	return "https://dev.tencent.com/api/oauth/access_token"
 }
-func (*TencentCloudSource) UserInfo() string {
+func (*tencentCloudSource) UserInfo() string {
 	return "https://dev.tencent.com/api/account/current_user"
 }
-func (*TencentCloudSource) Revoke() string   { return "" }
-func (*TencentCloudSource) Refresh() string  { return "" }
-func (*TencentCloudSource) ToString() string { return "TencentCloud" }
+func (*tencentCloudSource) Revoke() string  { return "" }
+func (*tencentCloudSource) Refresh() string { return "" }
+func (*tencentCloudSource) Name() string    { return "TencentCloud" }
 
 // oschina 开源中国
-type OschinaSource struct{}
+type oschinaSource struct{}
 
-func (*OschinaSource) Authorize() string   { return "https://www.oschina.net/action/oauth2/authorize" }
-func (*OschinaSource) AccessToken() string { return "https://www.oschina.net/action/openapi/token" }
-func (*OschinaSource) UserInfo() string    { return "https://www.oschina.net/action/openapi/user" }
-func (*OschinaSource) Revoke() string      { return "" }
-func (*OschinaSource) Refresh() string     { return "" }
-func (*OschinaSource) ToString() string    { return "Oschina" }
+func (*oschinaSource) Authorize() string   { return "https://www.oschina.net/action/oauth2/authorize" }
+func (*oschinaSource) AccessToken() string { return "https://www.oschina.net/action/openapi/token" }
+func (*oschinaSource) UserInfo() string    { return "https://www.oschina.net/action/openapi/user" }
+func (*oschinaSource) Revoke() string      { return "" }
+func (*oschinaSource) Refresh() string     { return "" }
+func (*oschinaSource) Name() string        { return "Oschina" }
 
 // 支付宝
-type AlipaySource struct{}
+type alipaySource struct{}
 
-func (*AlipaySource) Authorize() string {
+func (*alipaySource) Authorize() string {
 	return "https://openauth.alipay.com/oauth2/publicAppAuthorize.htm"
 }
-func (*AlipaySource) AccessToken() string { return "https://openapi.alipay.com/gateway.do" }
-func (*AlipaySource) UserInfo() string    { return "https://openapi.alipay.com/gateway.do" }
-func (*AlipaySource) Revoke() string      { return "" }
-func (*AlipaySource) Refresh() string     { return "" }
-func (*AlipaySource) ToString() string    { return "Alipay" }
+func (*alipaySource) AccessToken() string { return "https://openapi.alipay.com/gateway.do" }
+func (*alipaySource) UserInfo() string    { return "https://openapi.alipay.com/gateway.do" }
+func (*alipaySource) Revoke() string      { return "" }
+func (*alipaySource) Refresh() string     { return "" }
+func (*alipaySource) Name() string        { return "Alipay" }
 
 // QQ
-type QQSource struct{}
+type qqSource struct{}
 
-func (*QQSource) Authorize() string   { return "https://graph.qq.com/oauth2.0/authorize" }
-func (*QQSource) AccessToken() string { return "https://graph.qq.com/oauth2.0/token" }
-func (*QQSource) UserInfo() string    { return "https://graph.qq.com/user/get_user_info" }
-func (*QQSource) Revoke() string      { return "" }
-func (*QQSource) Refresh() string     { return "https://graph.qq.com/oauth2.0/token" }
-func (*QQSource) ToString() string    { return "QQ" }
+func (*qqSource) Authorize() string   { return "https://graph.qq.com/oauth2.0/authorize" }
+func (*qqSource) AccessToken() string { return "https://graph.qq.com/oauth2.0/token" }
+func (*qqSource) UserInfo() string    { return "https://graph.qq.com/user/get_user_info" }
+func (*qqSource) Revoke() string      { return "" }
+func (*qqSource) Refresh() string     { return "https://graph.qq.com/oauth2.0/token" }
+func (*qqSource) Name() string        { return "QQ" }
 
 // 微信开放平台
-type WechatOpenSource struct{}
+type wechatOpenSource struct{}
 
-func (*WechatOpenSource) Authorize() string { return "https://open.weixin.qq.com/connect/qrconnect" }
-func (*WechatOpenSource) AccessToken() string {
+func (*wechatOpenSource) Authorize() string { return "https://open.weixin.qq.com/connect/qrconnect" }
+func (*wechatOpenSource) AccessToken() string {
 	return "https://api.weixin.qq.com/sns/oauth2/access_token"
 }
-func (*WechatOpenSource) UserInfo() string { return "https://api.weixin.qq.com/sns/userinfo" }
-func (*WechatOpenSource) Revoke() string   { return "" }
-func (*WechatOpenSource) Refresh() string  { return "https://api.weixin.qq.com/sns/oauth2/refresh_token" }
-func (*WechatOpenSource) ToString() string { return "WechatOpen" }
+func (*wechatOpenSource) UserInfo() string { return "https://api.weixin.qq.com/sns/userinfo" }
+func (*wechatOpenSource) Revoke() string   { return "" }
+func (*wechatOpenSource) Refresh() string  { return "https://api.weixin.qq.com/sns/oauth2/refresh_token" }
+func (*wechatOpenSource) Name() string     { return "WechatOpen" }
 
 // 微信公众平台
-type WechatMpSource struct{}
+type wechatMpSource struct{}
 
-func (*WechatMpSource) Authorize() string {
+func (*wechatMpSource) Authorize() string {
 	return "https://open.weixin.qq.com/connect/oauth2/authorize"
 }
-func (*WechatMpSource) AccessToken() string {
+func (*wechatMpSource) AccessToken() string {
 	return "https://api.weixin.qq.com/sns/oauth2/access_token"
 }
-func (*WechatMpSource) UserInfo() string { return "https://api.weixin.qq.com/sns/userinfo" }
-func (*WechatMpSource) Revoke() string   { return "" }
-func (*WechatMpSource) Refresh() string  { return "https://api.weixin.qq.com/sns/oauth2/refresh_token" }
-func (*WechatMpSource) ToString() string { return "WechatMp" }
+func (*wechatMpSource) UserInfo() string { return "https://api.weixin.qq.com/sns/userinfo" }
+func (*wechatMpSource) Revoke() string   { return "" }
+func (*wechatMpSource) Refresh() string  { return "https://api.weixin.qq.com/sns/oauth2/refresh_token" }
+func (*wechatMpSource) Name() string     { return "WechatMp" }
 
 // 淘宝
-type TaobaoSource struct{}
+type taobaoSource struct{}
 
-func (*TaobaoSource) Authorize() string   { return "https://oauth.taobao.com/authorize" }
-func (*TaobaoSource) AccessToken() string { return "https://oauth.taobao.com/token" }
-func (*TaobaoSource) UserInfo() string    { return "w AuthException(AuthResponseStatus.UNSUPPORTED" }
-func (*TaobaoSource) Revoke() string      { return "" }
-func (*TaobaoSource) Refresh() string     { return "" }
-func (*TaobaoSource) ToString() string    { return "Taobao" }
+func (*taobaoSource) Authorize() string   { return "https://oauth.taobao.com/authorize" }
+func (*taobaoSource) AccessToken() string { return "https://oauth.taobao.com/token" }
+func (*taobaoSource) UserInfo() string    { return "w AuthException(AuthResponseStatus.UNSUPPORTED" }
+func (*taobaoSource) Revoke() string      { return "" }
+func (*taobaoSource) Refresh() string     { return "" }
+func (*taobaoSource) Name() string        { return "Taobao" }
 
 // Google
-type GoogleSource struct{}
+type googleSource struct{}
 
-func (*GoogleSource) Authorize() string   { return "https://accounts.google.com/o/oauth2/v2/auth" }
-func (*GoogleSource) AccessToken() string { return "https://www.googleapis.com/oauth2/v4/token" }
-func (*GoogleSource) UserInfo() string    { return "https://www.googleapis.com/oauth2/v3/userinfo" }
-func (*GoogleSource) Revoke() string      { return "" }
-func (*GoogleSource) Refresh() string     { return "" }
-func (*GoogleSource) ToString() string    { return "Google" }
+func (*googleSource) Authorize() string   { return "https://accounts.google.com/o/oauth2/v2/auth" }
+func (*googleSource) AccessToken() string { return "https://www.googleapis.com/oauth2/v4/token" }
+func (*googleSource) UserInfo() string    { return "https://www.googleapis.com/oauth2/v3/userinfo" }
+func (*googleSource) Revoke() string      { return "" }
+func (*googleSource) Refresh() string     { return "" }
+func (*googleSource) Name() string        { return "Google" }
 
 // Facebook
-type FacebookSource struct{}
+type facebookSource struct{}
 
-func (*FacebookSource) Authorize() string { return "https://www.facebook.com/v3.3/dialog/oauth" }
-func (*FacebookSource) AccessToken() string {
+func (*facebookSource) Authorize() string { return "https://www.facebook.com/v3.3/dialog/oauth" }
+func (*facebookSource) AccessToken() string {
 	return "https://graph.facebook.com/v3.3/oauth/access_token"
 }
-func (*FacebookSource) UserInfo() string { return "https://graph.facebook.com/v3.3/me" }
-func (*FacebookSource) Revoke() string   { return "" }
-func (*FacebookSource) Refresh() string  { return "" }
-func (*FacebookSource) ToString() string { return "Facebook" }
+func (*facebookSource) UserInfo() string { return "https://graph.facebook.com/v3.3/me" }
+func (*facebookSource) Revoke() string   { return "" }
+func (*facebookSource) Refresh() string  { return "" }
+func (*facebookSource) Name() string     { return "Facebook" }
 
 // 抖音
-type DouyinSource struct{}
+type douyinSource struct{}
 
-func (*DouyinSource) Authorize() string   { return "https://open.douyin.com/platform/oauth/connect" }
-func (*DouyinSource) AccessToken() string { return "https://open.douyin.com/oauth/access_token/" }
-func (*DouyinSource) UserInfo() string    { return "https://open.douyin.com/oauth/userinfo/" }
-func (*DouyinSource) Revoke() string      { return "" }
-func (*DouyinSource) Refresh() string     { return "https://open.douyin.com/oauth/refresh_token/" }
-func (*DouyinSource) ToString() string    { return "Douyin" }
+func (*douyinSource) Authorize() string   { return "https://open.douyin.com/platform/oauth/connect" }
+func (*douyinSource) AccessToken() string { return "https://open.douyin.com/oauth/access_token/" }
+func (*douyinSource) UserInfo() string    { return "https://open.douyin.com/oauth/userinfo/" }
+func (*douyinSource) Revoke() string      { return "" }
+func (*douyinSource) Refresh() string     { return "https://open.douyin.com/oauth/refresh_token/" }
+func (*douyinSource) Name() string        { return "Douyin" }
 
 // 领英
-type LinkedinSource struct{}
+type linkedinSource struct{}
 
-func (*LinkedinSource) Authorize() string   { return "https://www.linkedin.com/oauth/v2/authorization" }
-func (*LinkedinSource) AccessToken() string { return "https://www.linkedin.com/oauth/v2/accessToken" }
-func (*LinkedinSource) UserInfo() string    { return "https://api.linkedin.com/v2/me" }
-func (*LinkedinSource) Revoke() string      { return "" }
-func (*LinkedinSource) Refresh() string     { return "https://www.linkedin.com/oauth/v2/accessToken" }
-func (*LinkedinSource) ToString() string    { return "Linkedin" }
+func (*linkedinSource) Authorize() string   { return "https://www.linkedin.com/oauth/v2/authorization" }
+func (*linkedinSource) AccessToken() string { return "https://www.linkedin.com/oauth/v2/accessToken" }
+func (*linkedinSource) UserInfo() string    { return "https://api.linkedin.com/v2/me" }
+func (*linkedinSource) Revoke() string      { return "" }
+func (*linkedinSource) Refresh() string     { return "https://www.linkedin.com/oauth/v2/accessToken" }
+func (*linkedinSource) Name() string        { return "Linkedin" }
 
 // 微软
-type MicrosoftSource struct{}
+type microsoftSource struct{}
 
-func (*MicrosoftSource) Authorize() string {
+func (*microsoftSource) Authorize() string {
 	return "https://login.microsoftonline.com/common/oauth2/v2.0/authorize"
 }
-func (*MicrosoftSource) AccessToken() string {
+func (*microsoftSource) AccessToken() string {
 	return "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 }
-func (*MicrosoftSource) UserInfo() string { return "https://graph.microsoft.com/v1.0/me" }
-func (*MicrosoftSource) Revoke() string   { return "" }
-func (*MicrosoftSource) Refresh() string {
+func (*microsoftSource) UserInfo() string { return "https://graph.microsoft.com/v1.0/me" }
+func (*microsoftSource) Revoke() string   { return "" }
+func (*microsoftSource) Refresh() string {
 	return "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 }
-func (*MicrosoftSource) ToString() string { return "Microsoft" }
+func (*microsoftSource) Name() string { return "Microsoft" }
 
 // 小米
-type MiSource struct{}
+type miSource struct{}
 
-func (*MiSource) Authorize() string   { return "https://account.xiaomi.com/oauth2/authorize" }
-func (*MiSource) AccessToken() string { return "https://account.xiaomi.com/oauth2/token" }
-func (*MiSource) UserInfo() string    { return "https://open.account.xiaomi.com/user/profile" }
-func (*MiSource) Revoke() string      { return "" }
-func (*MiSource) Refresh() string     { return "https://account.xiaomi.com/oauth2/token" }
-func (*MiSource) ToString() string    { return "Mi" }
+func (*miSource) Authorize() string   { return "https://account.xiaomi.com/oauth2/authorize" }
+func (*miSource) AccessToken() string { return "https://account.xiaomi.com/oauth2/token" }
+func (*miSource) UserInfo() string    { return "https://open.account.xiaomi.com/user/profile" }
+func (*miSource) Revoke() string      { return "" }
+func (*miSource) Refresh() string     { return "https://account.xiaomi.com/oauth2/token" }
+func (*miSource) Name() string        { return "Mi" }
 
 // 今日头条
-type ToutiaoSource struct{}
+type toutiaoSource struct{}
 
-func (*ToutiaoSource) Authorize() string   { return "https://open.snssdk.com/auth/authorize" }
-func (*ToutiaoSource) AccessToken() string { return "https://open.snssdk.com/auth/token" }
-func (*ToutiaoSource) UserInfo() string    { return "https://open.snssdk.com/data/user_profile" }
-func (*ToutiaoSource) Revoke() string      { return "" }
-func (*ToutiaoSource) Refresh() string     { return "" }
-func (*ToutiaoSource) ToString() string    { return "Toutiao" }
+func (*toutiaoSource) Authorize() string   { return "https://open.snssdk.com/auth/authorize" }
+func (*toutiaoSource) AccessToken() string { return "https://open.snssdk.com/auth/token" }
+func (*toutiaoSource) UserInfo() string    { return "https://open.snssdk.com/data/user_profile" }
+func (*toutiaoSource) Revoke() string      { return "" }
+func (*toutiaoSource) Refresh() string     { return "" }
+func (*toutiaoSource) Name() string        { return "Toutiao" }
 
 // Teambition
-type TeambitionSource struct{}
+type teambitionSource struct{}
 
-func (*TeambitionSource) Authorize() string { return "https://account.teambition.com/oauth2/authorize" }
-func (*TeambitionSource) AccessToken() string {
+func (*teambitionSource) Authorize() string { return "https://account.teambition.com/oauth2/authorize" }
+func (*teambitionSource) AccessToken() string {
 	return "https://account.teambition.com/oauth2/access_token"
 }
-func (*TeambitionSource) UserInfo() string { return "https://api.teambition.com/users/me" }
-func (*TeambitionSource) Revoke() string   { return "" }
-func (*TeambitionSource) Refresh() string {
+func (*teambitionSource) UserInfo() string { return "https://api.teambition.com/users/me" }
+func (*teambitionSource) Revoke() string   { return "" }
+func (*teambitionSource) Refresh() string {
 	return "https://account.teambition.com/oauth2/refresh_token"
 }
-func (*TeambitionSource) ToString() string { return "Teambition" }
+func (*teambitionSource) Name() string { return "Teambition" }
 
 // 人人网
-type RenrenSource struct{}
+type renrenSource struct{}
 
-func (*RenrenSource) Authorize() string   { return "https://graph.renren.com/oauth/authorize" }
-func (*RenrenSource) AccessToken() string { return "https://graph.renren.com/oauth/token" }
-func (*RenrenSource) UserInfo() string    { return "https://api.renren.com/v2/user/get" }
-func (*RenrenSource) Revoke() string      { return "" }
-func (*RenrenSource) Refresh() string     { return "https://graph.renren.com/oauth/token" }
-func (*RenrenSource) ToString() string    { return "Renren" }
+func (*renrenSource) Authorize() string   { return "https://graph.renren.com/oauth/authorize" }
+func (*renrenSource) AccessToken() string { return "https://graph.renren.com/oauth/token" }
+func (*renrenSource) UserInfo() string    { return "https://api.renren.com/v2/user/get" }
+func (*renrenSource) Revoke() string      { return "" }
+func (*renrenSource) Refresh() string     { return "https://graph.renren.com/oauth/token" }
+func (*renrenSource) Name() string        { return "Renren" }
 
 // Pinterest
-type PinterestSource struct{}
+type pinterestSource struct{}
 
-func (*PinterestSource) Authorize() string   { return "https://api.pinterest.com/oauth" }
-func (*PinterestSource) AccessToken() string { return "https://api.pinterest.com/v1/oauth/token" }
-func (*PinterestSource) UserInfo() string    { return "https://api.pinterest.com/v1/me" }
-func (*PinterestSource) Revoke() string      { return "" }
-func (*PinterestSource) Refresh() string     { return "" }
-func (*PinterestSource) ToString() string    { return "Pinterest" }
+func (*pinterestSource) Authorize() string   { return "https://api.pinterest.com/oauth" }
+func (*pinterestSource) AccessToken() string { return "https://api.pinterest.com/v1/oauth/token" }
+func (*pinterestSource) UserInfo() string    { return "https://api.pinterest.com/v1/me" }
+func (*pinterestSource) Revoke() string      { return "" }
+func (*pinterestSource) Refresh() string     { return "" }
+func (*pinterestSource) Name() string        { return "Pinterest" }
 
 // Stack Overflow
-type StackOverflowSource struct{}
+type stackOverflowSource struct{}
 
-func (*StackOverflowSource) Authorize() string { return "https://stackoverflow.com/oauth" }
-func (*StackOverflowSource) AccessToken() string {
+func (*stackOverflowSource) Authorize() string { return "https://stackoverflow.com/oauth" }
+func (*stackOverflowSource) AccessToken() string {
 	return "https://stackoverflow.com/oauth/access_token/json"
 }
-func (*StackOverflowSource) UserInfo() string { return "https://api.stackexchange.com/2.2/me" }
-func (*StackOverflowSource) Revoke() string   { return "" }
-func (*StackOverflowSource) Refresh() string  { return "" }
-func (*StackOverflowSource) ToString() string { return "StackOverflow" }
+func (*stackOverflowSource) UserInfo() string { return "https://api.stackexchange.com/2.2/me" }
+func (*stackOverflowSource) Revoke() string   { return "" }
+func (*stackOverflowSource) Refresh() string  { return "" }
+func (*stackOverflowSource) Name() string     { return "StackOverflow" }
 
 // 华为
-type HuaweiSource struct{}
+type huaweiSource struct{}
 
-func (*HuaweiSource) Authorize() string {
+func (*huaweiSource) Authorize() string {
 	return "https://oauth-login.cloud.huawei.com/oauth2/v2/authorize"
 }
-func (*HuaweiSource) AccessToken() string {
+func (*huaweiSource) AccessToken() string {
 	return "https://oauth-login.cloud.huawei.com/oauth2/v2/token"
 }
-func (*HuaweiSource) UserInfo() string { return "https://api.vmall.com/rest.php" }
-func (*HuaweiSource) Revoke() string   { return "" }
-func (*HuaweiSource) Refresh() string  { return "https://oauth-login.cloud.huawei.com/oauth2/v2/token" }
-func (*HuaweiSource) ToString() string { return "Huawei" }
+func (*huaweiSource) UserInfo() string { return "https://api.vmall.com/rest.php" }
+func (*huaweiSource) Revoke() string   { return "" }
+func (*huaweiSource) Refresh() string  { return "https://oauth-login.cloud.huawei.com/oauth2/v2/token" }
+func (*huaweiSource) Name() string     { return "Huawei" }
 
 // 企业微信
-type WechatEnterpriseSource struct{}
+type wechatEnterpriseSource struct{}
 
-func (*WechatEnterpriseSource) Authorize() string {
+func (*wechatEnterpriseSource) Authorize() string {
 	return "https://open.work.weixin.qq.com/wwopen/sso/qrConnect"
 }
-func (*WechatEnterpriseSource) AccessToken() string {
+func (*wechatEnterpriseSource) AccessToken() string {
 	return "https://qyapi.weixin.qq.com/cgi-bin/gettoken"
 }
-func (*WechatEnterpriseSource) UserInfo() string {
+func (*wechatEnterpriseSource) UserInfo() string {
 	return "https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo"
 }
-func (*WechatEnterpriseSource) Revoke() string   { return "" }
-func (*WechatEnterpriseSource) Refresh() string  { return "" }
-func (*WechatEnterpriseSource) ToString() string { return "WechatEnterprise" }
+func (*wechatEnterpriseSource) Revoke() string  { return "" }
+func (*wechatEnterpriseSource) Refresh() string { return "" }
+func (*wechatEnterpriseSource) Name() string    { return "WechatEnterprise" }
 
 // 酷家乐
-type KujialeSource struct{}
+type kujialeSource struct{}
 
-func (*KujialeSource) Authorize() string   { return "https://oauth.kujiale.com/oauth2/show" }
-func (*KujialeSource) AccessToken() string { return "https://oauth.kujiale.com/oauth2/auth/token" }
-func (*KujialeSource) UserInfo() string    { return "https://oauth.kujiale.com/oauth2/openapi/user" }
-func (*KujialeSource) Revoke() string      { return "" }
-func (*KujialeSource) Refresh() string     { return "https://oauth.kujiale.com/oauth2/auth/token/refresh" }
-func (*KujialeSource) ToString() string    { return "Kujiale" }
+func (*kujialeSource) Authorize() string   { return "https://oauth.kujiale.com/oauth2/show" }
+func (*kujialeSource) AccessToken() string { return "https://oauth.kujiale.com/oauth2/auth/token" }
+func (*kujialeSource) UserInfo() string    { return "https://oauth.kujiale.com/oauth2/openapi/user" }
+func (*kujialeSource) Revoke() string      { return "" }
+func (*kujialeSource) Refresh() string     { return "https://oauth.kujiale.com/oauth2/auth/token/refresh" }
+func (*kujialeSource) Name() string        { return "Kujiale" }
 
 // Gitlab
-type GitlabSource struct{}
+type gitlabSource struct{}
 
-func (*GitlabSource) Authorize() string   { return "https://gitlab.com/oauth/authorize" }
-func (*GitlabSource) AccessToken() string { return "https://gitlab.com/oauth/token" }
-func (*GitlabSource) UserInfo() string    { return "https://gitlab.com/api/v4/user" }
-func (*GitlabSource) Revoke() string      { return "" }
-func (*GitlabSource) Refresh() string     { return "" }
-func (*GitlabSource) ToString() string    { return "Gitlab" }
+func (*gitlabSource) Authorize() string   { return "https://gitlab.com/oauth/authorize" }
+func (*gitlabSource) AccessToken() string { return "https://gitlab.com/oauth/token" }
+func (*gitlabSource) UserInfo() string    { return "https://gitlab.com/api/v4/user" }
+func (*gitlabSource) Revoke() string      { return "" }
+func (*gitlabSource) Refresh() string     { return "" }
+func (*gitlabSource) Name() string        { return "Gitlab" }
 
 // 美团
-type MeituanSource struct{}
+type meituanSource struct{}
 
-func (*MeituanSource) Authorize() string { return "https://openapi.waimai.meituan.com/oauth/authorize" }
-func (*MeituanSource) AccessToken() string {
+func (*meituanSource) Authorize() string { return "https://openapi.waimai.meituan.com/oauth/authorize" }
+func (*meituanSource) AccessToken() string {
 	return "https://openapi.waimai.meituan.com/oauth/access_token"
 }
-func (*MeituanSource) UserInfo() string { return "https://openapi.waimai.meituan.com/oauth/userinfo" }
-func (*MeituanSource) Revoke() string   { return "" }
-func (*MeituanSource) Refresh() string {
+func (*meituanSource) UserInfo() string { return "https://openapi.waimai.meituan.com/oauth/userinfo" }
+func (*meituanSource) Revoke() string   { return "" }
+func (*meituanSource) Refresh() string {
 	return "https://openapi.waimai.meituan.com/oauth/refresh_token"
 }
-func (*MeituanSource) ToString() string { return "Meituan" }
+func (*meituanSource) Name() string { return "Meituan" }
 
 // 饿了么
-type ElemeSource struct{}
+type elemeSource struct{}
 
-func (*ElemeSource) Authorize() string   { return "https://open-api.shop.ele.me/authorize" }
-func (*ElemeSource) AccessToken() string { return "https://open-api.shop.ele.me/token" }
-func (*ElemeSource) UserInfo() string    { return "https://open-api.shop.ele.me/api/v1/" }
-func (*ElemeSource) Revoke() string      { return "" }
-func (*ElemeSource) Refresh() string     { return "https://open-api.shop.ele.me/token" }
-func (*ElemeSource) ToString() string    { return "Eleme" }
+func (*elemeSource) Authorize() string   { return "https://open-api.shop.ele.me/authorize" }
+func (*elemeSource) AccessToken() string { return "https://open-api.shop.ele.me/token" }
+func (*elemeSource) UserInfo() string    { return "https://open-api.shop.ele.me/api/v1/" }
+func (*elemeSource) Revoke() string      { return "" }
+func (*elemeSource) Refresh() string     { return "https://open-api.shop.ele.me/token" }
+func (*elemeSource) Name() string        { return "Eleme" }
 
 // Twitter
-type TwitterSource struct{}
+type twitterSource struct{}
 
-func (*TwitterSource) Authorize() string   { return "https://api.twitter.com/oauth/authenticate" }
-func (*TwitterSource) AccessToken() string { return "https://api.twitter.com/oauth/access_token" }
-func (*TwitterSource) UserInfo() string    { return "https://api.twitter.com/1.1/users/show.json" }
-func (*TwitterSource) Revoke() string      { return "" }
-func (*TwitterSource) Refresh() string     { return "" }
-func (*TwitterSource) ToString() string    { return "Twitter" }
+func (*twitterSource) Authorize() string   { return "https://api.twitter.com/oauth/authenticate" }
+func (*twitterSource) AccessToken() string { return "https://api.twitter.com/oauth/access_token" }
+func (*twitterSource) UserInfo() string    { return "https://api.twitter.com/1.1/users/show.json" }
+func (*twitterSource) Revoke() string      { return "" }
+func (*twitterSource) Refresh() string     { return "" }
+func (*twitterSource) Name() string        { return "Twitter" }

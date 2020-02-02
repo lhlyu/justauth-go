@@ -1,6 +1,6 @@
 package result
 
-import "github.com/lhlyu/justauth-go/model"
+import "github.com/lhlyu/justauth-go/entity"
 
 type baseResult struct {
 	err  error
@@ -41,28 +41,35 @@ func NewResult(code int, msg string) *Result {
 	}
 }
 
+func (this *Result) copy() *Result {
+	return NewResult(this.code, this.msg)
+}
+
 func (this *Result) Val() interface{} {
 	return this.val
 }
 
 func (this *Result) WithVal(val interface{}) *Result {
-	this.val = val
-	return this
+	r := this.copy()
+	r.val = val
+	return r
 }
 
 func (this *Result) WithErr(err error) *Result {
-	this.err = err
-	this.WithMsg(err.Error())
-	return this
+	r := this.copy()
+	r.err = err
+	r.WithMsg(err.Error())
+	return r
 }
 
 func (this *Result) WithMsg(msg string) *Result {
-	if this.msg == "" {
-		this.msg = msg
+	r := this.copy()
+	if r.msg == "" {
+		r.msg = msg
 	} else {
-		this.msg += ":" + msg
+		r.msg += ":" + msg
 	}
-	return this
+	return r
 }
 
 func (this *Result) ToUrlResult() *UrlResult {
@@ -74,7 +81,7 @@ func (this *Result) ToUrlResult() *UrlResult {
 }
 
 func (this *Result) ToUserResult() *UserResult {
-	val, _ := this.val.(*model.AuthUser)
+	val, _ := this.val.(*entity.User)
 	return &UserResult{
 		baseResult: this.baseResult,
 		val:        val,
@@ -82,7 +89,7 @@ func (this *Result) ToUserResult() *UserResult {
 }
 
 func (this *Result) ToTokenResult() *TokenResult {
-	val, _ := this.val.(*model.AuthToken)
+	val, _ := this.val.(*entity.Token)
 	return &TokenResult{
 		baseResult: this.baseResult,
 		val:        val,
@@ -114,10 +121,10 @@ func (this *UrlResult) Val() string {
 type UserResult struct {
 	baseResult
 
-	val *model.AuthUser
+	val *entity.User
 }
 
-func (this *UserResult) Val() *model.AuthUser {
+func (this *UserResult) Val() *entity.User {
 	return this.val
 }
 
@@ -126,10 +133,10 @@ func (this *UserResult) Val() *model.AuthUser {
 type TokenResult struct {
 	baseResult
 
-	val *model.AuthToken
+	val *entity.Token
 }
 
-func (this *TokenResult) Val() *model.AuthToken {
+func (this *TokenResult) Val() *entity.Token {
 	return this.val
 }
 

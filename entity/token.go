@@ -1,6 +1,6 @@
-package model
+package entity
 
-type AuthToken struct {
+type Token struct {
 	AccessToken  string `json:"accessToken"`
 	ExpireIn     string `json:"expireIn"`
 	RefreshToken string `json:"refreshToken"`
