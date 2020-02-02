@@ -5,9 +5,6 @@
 
 - [X] Github
 - [X] Gitee
-- [X] Gitlab
-- [X] Coding
-- [X] QQ
 
 ## 例子
 
