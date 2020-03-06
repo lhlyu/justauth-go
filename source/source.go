@@ -18,8 +18,8 @@ type AuthSource interface {
 // 32
 var (
 	GITHUB = &githubSource{} // Github
+	GITEE  = &giteeSource{}  // gitee
 	//WEIBO             = &weiboSource{}            // 新浪微博
-	GITEE = &giteeSource{} // gitee
 	//DINGTALK          = &dingtalkSource{}         // 钉钉
 	//BAIDU             = &baiduSource{}            // 百度
 	//CSDN              = &csdnSource{}             // csdn

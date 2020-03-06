@@ -38,11 +38,11 @@ func (this *githubRequest) AuthorizeWithState(state string) *result.UrlResult {
 func (this *githubRequest) Login(callback *entity.Callback) *result.UserResult {
 	// first: get access token
 	url := utils.NewUrlBuilder(this.Source.AccessToken()).
+		AddParam("grant_type", "authorization_code").
 		AddParam("code", callback.Code).
 		AddParam("client_id", this.Config.ClientId).
 		AddParam("client_secret", this.Config.ClientSecret).
 		AddParam("redirect_uri", this.Config.RedirectUrl).
-		AddParam("grant_type", "authorization_code").
 		Build()
 	rs := this.getAccessToken(url)
 	if !rs.Ok() {
@@ -103,10 +103,10 @@ func (this *githubRequest) getUserInfo(url string) *result.Result {
 		Email:     m["email"],
 		Remark:    m["bio"],
 		Url:       m["html_url"],
-		Gender:    utils.GetRealGender("").Desc,
-		Source:    this.Source.Name(),
 		CreatedAt: m["created_at"],
 		UpdatedAt: m["updated_at"],
+		Source:    this.Source.Name(),
+		Gender:    utils.GetRealGender("").Desc,
 	}
 	return result.Success.WithVal(user)
 }
