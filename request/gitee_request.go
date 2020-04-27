@@ -6,6 +6,7 @@ import (
 	"github.com/lhlyu/justauth-go/result"
 	"github.com/lhlyu/justauth-go/source"
 	"github.com/lhlyu/justauth-go/utils"
+	"github.com/lhlyu/request/v2"
 )
 
 type giteeRequest struct {
@@ -73,7 +74,8 @@ func (this *giteeRequest) Refresh(token *entity.Token) *result.TokenResult {
 
 // get access token
 func (this *giteeRequest) getAccessToken(url string) *result.Result {
-	body, err := utils.Post(url)
+	resp := request.New().Post(url)
+	body, err := resp.GetBodyString(), resp.Error()
 	if err != nil {
 		return result.Failure.WithErr(err)
 	}
@@ -93,7 +95,8 @@ func (this *giteeRequest) getAccessToken(url string) *result.Result {
 
 // get user info
 func (this *giteeRequest) getUserInfo(url string) *result.Result {
-	body, err := utils.Get(url)
+	resp := request.New().Get(url)
+	body, err := resp.GetBodyString(), resp.Error()
 	if err != nil {
 		return result.Failure.WithErr(err)
 	}

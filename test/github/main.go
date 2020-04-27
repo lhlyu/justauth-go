@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/lhlyu/justauth-go/config"
 	"github.com/lhlyu/justauth-go/entity"
 	"github.com/lhlyu/justauth-go/request"
@@ -64,6 +65,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	})
 	// 如果失败的话，返回错误信息
 	if !rs.Ok() {
+		fmt.Println(rs.Err())
 		w.Write([]byte(rs.Msg()))
 		return
 	}

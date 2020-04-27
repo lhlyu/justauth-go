@@ -6,6 +6,7 @@ import (
 	"github.com/lhlyu/justauth-go/result"
 	"github.com/lhlyu/justauth-go/source"
 	"github.com/lhlyu/justauth-go/utils"
+	"github.com/lhlyu/request/v2"
 )
 
 type githubRequest struct {
@@ -66,7 +67,8 @@ func (this *githubRequest) Login(callback *entity.Callback) *result.UserResult {
 
 // get access token
 func (this *githubRequest) getAccessToken(url string) *result.Result {
-	body, err := utils.Post(url)
+	resp := request.New().Post(url)
+	body, err := resp.GetBodyString(), resp.Error()
 	if err != nil {
 		return result.Failure.WithErr(err)
 	}
@@ -84,7 +86,8 @@ func (this *githubRequest) getAccessToken(url string) *result.Result {
 
 // get user info
 func (this *githubRequest) getUserInfo(url string) *result.Result {
-	body, err := utils.Get(url)
+	resp := request.New().Get(url)
+	body, err := resp.GetBodyString(), resp.Error()
 	if err != nil {
 		return result.Failure.WithErr(err)
 	}
