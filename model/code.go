@@ -1,4 +1,4 @@
-package result
+package model
 
 const (
 	SUCCESS = 2000

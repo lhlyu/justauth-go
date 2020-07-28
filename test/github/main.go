@@ -2,39 +2,36 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/lhlyu/justauth-go/config"
-	"github.com/lhlyu/justauth-go/entity"
-	"github.com/lhlyu/justauth-go/request"
-	"github.com/lhlyu/justauth-go/source"
+	"github.com/lhlyu/justauth-go"
+	"github.com/lhlyu/justauth-go/model"
 	"log"
 	"net/http"
 	"net/url"
 )
 
 const (
-	CLIENT_ID     = "Iv1.094eec991d1d290d2"                     // 自行申请
-	CLIENT_SECRET = "26074c03ea0167590039f3fb175078a14d864ce1a" // 自行申请
-	REDIRECT_URL  = "http://localhost:8080/login"               // 回调地址
+	CLIENT_ID     = "6713787xxxxxxxxxx"               // 自行申请
+	CLIENT_SECRET = "99cb9efbe5xxxxxxxxxxxxxxxxxxxxx" // 自行申请
+	REDIRECT_URL  = "http://localhost:8080/api/login" // 回调地址
 
 	STATE = "test"
 )
 
-var authRequest request.AuthRequest
+var auth justauth.IAuth
 
 func init() {
-	// 初始化
-	authRequest, _ = request.NewAuthRequest(config.AuthConfig{
+	auth = justauth.NewAuth("github", model.AuthConfig{
 		ClientId:     CLIENT_ID,
 		ClientSecret: CLIENT_SECRET,
 		RedirectUrl:  REDIRECT_URL,
-	}, source.GITHUB) // 这里指定源
+	})
 }
 
 func main() {
 	// http://localhost:8080/     // 返回授权的地址
 	http.HandleFunc("/", Authorize)
 	// 授权成功回调地址，登陆成功会返回用户的信息
-	http.HandleFunc("/login", Login)
+	http.HandleFunc("/api/login", Login)
 
 	log.Println("localhost:8080")
 	http.ListenAndServe("localhost:8080", nil)
@@ -42,12 +39,7 @@ func main() {
 
 // 生成授权URL
 func Authorize(w http.ResponseWriter, r *http.Request) {
-	rs := authRequest.AuthorizeWithState(STATE)
-	// 如果失败的话，返回错误信息
-	if !rs.Ok() {
-		w.Write([]byte(rs.Msg()))
-		return
-	}
+	rs := auth.AuthorizeWithState(STATE)
 	w.Write([]byte(rs.Val()))
 }
 
@@ -58,7 +50,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// 获取参数
 	code := q.Get("code")
 	state := q.Get("state")
-	rs := authRequest.Login(&entity.Callback{
+	rs := auth.Login(model.Callback{
 		Code:  code,
 		State: state,
 	})

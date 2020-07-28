@@ -1,4 +1,4 @@
-package entity
+package model
 
 type Callback struct {
 	Code  string `json:"code"`
