@@ -1,6 +1,8 @@
-package entity
+package model
 
 type User struct {
+	Token Token `json:"token"`
+
 	UUID      string `json:"uuid"`
 	UserName  string `json:"userName"`
 	NickName  string `json:"nickName"`
@@ -11,10 +13,9 @@ type User struct {
 	Email     string `json:"email"`
 	Remark    string `json:"remark"`
 	Url       string `json:"url"`
-	Gender    string `json:"gender"`
 	Source    string `json:"source"`
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
-
-	Token *Token `json:"token"`
+	// 原始信息json
+	Original string `json:"original"`
 }

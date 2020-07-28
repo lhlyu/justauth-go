@@ -1,4 +1,4 @@
-package config
+package model
 
 type AuthConfig struct {
 	ClientId     string

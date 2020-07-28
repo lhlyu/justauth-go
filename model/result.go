@@ -1,6 +1,4 @@
-package result
-
-import "github.com/lhlyu/justauth-go/entity"
+package model
 
 type baseResult struct {
 	err  error
@@ -9,7 +7,10 @@ type baseResult struct {
 }
 
 func (this *baseResult) Ok() bool {
-	return this.code == SUCCESS
+	if this.err != nil {
+		return false
+	}
+	return true
 }
 
 func (this *baseResult) Err() error {
@@ -81,7 +82,7 @@ func (this *Result) ToUrlResult() *UrlResult {
 }
 
 func (this *Result) ToUserResult() *UserResult {
-	val, _ := this.val.(*entity.User)
+	val, _ := this.val.(*User)
 	return &UserResult{
 		baseResult: this.baseResult,
 		val:        val,
@@ -89,7 +90,7 @@ func (this *Result) ToUserResult() *UserResult {
 }
 
 func (this *Result) ToTokenResult() *TokenResult {
-	val, _ := this.val.(*entity.Token)
+	val, _ := this.val.(*Token)
 	return &TokenResult{
 		baseResult: this.baseResult,
 		val:        val,
@@ -121,10 +122,10 @@ func (this *UrlResult) Val() string {
 type UserResult struct {
 	baseResult
 
-	val *entity.User
+	val *User
 }
 
-func (this *UserResult) Val() *entity.User {
+func (this *UserResult) Val() *User {
 	return this.val
 }
 
@@ -133,10 +134,10 @@ func (this *UserResult) Val() *entity.User {
 type TokenResult struct {
 	baseResult
 
-	val *entity.Token
+	val *Token
 }
 
-func (this *TokenResult) Val() *entity.Token {
+func (this *TokenResult) Val() *Token {
 	return this.val
 }
 
